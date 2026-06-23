@@ -5,6 +5,7 @@ export interface SubmissionData {
   email: string
   phone?: string
   message: string
+  consent: boolean 
 }
 
 export interface SaveResult {
@@ -25,12 +26,13 @@ export async function saveSubmission(
     const sql = getDb()
 
     const rows = await sql`
-      INSERT INTO contact_inquiries (name, email, phone, message)
+      INSERT INTO contact_inquiries (name, email, phone, message, consent)
       VALUES (
         ${data.name},
         ${data.email},
         ${data.phone ?? null},
-        ${data.message}
+        ${data.message},
+        ${data.consent} 
       )
       RETURNING id
     `
