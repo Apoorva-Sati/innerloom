@@ -1,4 +1,6 @@
+import AboutSnippet from "@/components/home/AboutSnippet";
 import { Hero } from "@/components/home/Hero";
+import HomeCTA from "@/components/home/HomeCTA";
 import HowItWorks from "@/components/home/HowItWorks";
 import TrustBar from "@/components/home/TrustBar";
 import WhoIHelp from "@/components/home/WhoIHelp";
@@ -10,9 +12,9 @@ export default function HomePage() {
       <Hero />
       <WhoIHelp />
       <HowItWorks />
-      {/* <AboutSnippet /> */}
+      <AboutSnippet />
       <TrustBar />
-      {/* <HomeCTA /> */}
+      <HomeCTA />
     </>
   )
 }

@@ -1,8 +1,7 @@
-// src/components/home/TrustBar.tsx
 const trustItems = [
   { value: "CBT Certified",     label: "120-hour course" },
   { value: "Confidential",      label: "All sessions private" },
-  { value: "Online & In-person", label: "Flexible format" },
+  { value: "Online",            label: "Flexible format" },
   { value: "India-wide",        label: "Serving all states" },
 ]
 

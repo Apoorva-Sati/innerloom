@@ -1,44 +1,32 @@
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
 export function Hero() {
   return (
-    <section style={{
-      background: "var(--color-sand)",
-      padding: "80px 24px",
-    }}>
-      <div style={{ maxWidth: "1100px", margin: "0 auto",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "48px", alignItems: "center" }}>
-
+    <section className="bg-sand px-6 py-20">
+      <div className="mx-auto grid max-w-275 items-center gap-12 md:grid-cols-2">
         <div>
-          <p style={{ color: "var(--color-teal-mid)",
-            fontSize: "14px", fontWeight: 500,
-            marginBottom: "12px", letterSpacing: "0.05em",
-            textTransform: "uppercase" }}>
-            Online & In-person · India
+          <p className="mb-3 text-sm font-medium uppercase tracking-wider text-teal-mid">
+            Online · India
           </p>
-          <h1 style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(36px, 5vw, 56px)",
-            fontWeight: 300, lineHeight: 1.2,
-            color: "var(--color-teal)",
-            marginBottom: "20px",
-          }}>
+
+          <h1
+            className="mb-5 text-[clamp(36px,5vw,56px)] font-light leading-[1.2] text-teal"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             You don't have to carry this alone.
           </h1>
-          <p style={{ fontSize: "18px",
-            color: "var(--color-brown-mid)",
-            marginBottom: "32px", lineHeight: 1.7 }}>
+
+          <p className="mb-8 text-lg leading-[1.7] text-brown-mid">
             A safe, confidential space to talk — for young adults,
             students, and professionals ready to feel better.
           </p>
-          <div style={{ display: "flex", gap: "12px",
-            flexWrap: "wrap" }}>
+
+          <div className="flex flex-wrap gap-3">
             <Link href="/contact" className="btn-primary">
               Book a free 15-min call
             </Link>
+
             <Link href="/about" className="btn-secondary">
               Learn about me
             </Link>
@@ -49,13 +37,13 @@ export function Hero() {
           <Image
             src="/images/hero-photo.jpg"
             alt="[Name], Counselling Psychologist"
-            width={500} height={600}
+            width={500}
+            height={600}
             priority
-            style={{ borderRadius: "var(--radius-xl)",
-              width: "100%", height: "auto" }}
+            className="h-auto w-full rounded-(--radius-xl)"
           />
         </div>
       </div>
     </section>
-  )
+  );
 }

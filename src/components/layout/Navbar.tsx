@@ -57,7 +57,9 @@ export default function Navbar() {
             </Link>
           ))}
           <a
-            href="https://wa.me/91XXXXXXXXXX"
+          href={`https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER}?text=${encodeURIComponent(
+            "Hi, I'd like to book a session"
+          )}`}
             className="text-sm text-sage-dark font-medium"
             target="_blank"
             rel="noopener noreferrer"
