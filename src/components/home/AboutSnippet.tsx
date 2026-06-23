@@ -15,7 +15,7 @@ export default function AboutSnippet() {
         <div className=" mx-auto w-full max-w-sm md:max-w-none">
           <div/>
           <Image
-            src="/images/about-photo.jpeg"
+            src="/images/about-photo.jpg"
             alt="Parishkriti, Counselling Psychologist"
             width={420}
             height={500}

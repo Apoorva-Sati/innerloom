@@ -40,7 +40,7 @@ export function AboutMe() {
 
         <div>
           <Image
-            src="/images/aboutMe-photo.jpeg"
+            src="/images/hero-photo.jpg"
             alt="Parishkriti, Counselling Psychologist"
             width={320}
             height={400}

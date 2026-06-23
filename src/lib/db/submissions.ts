@@ -14,7 +14,7 @@ export interface SaveResult {
 }
 
 /**
- * Insert a contact form submission into the `contact_submissions` table.
+ * Insert a contact form submission into the `contact_inquiries` table.
  * Call this AFTER the Resend email succeeds — a DB failure should never
  * surface to the user (caller decides how to handle the result).
  */
@@ -25,7 +25,7 @@ export async function saveSubmission(
     const sql = getDb()
 
     const rows = await sql`
-      INSERT INTO contact_submissions (name, email, phone, message)
+      INSERT INTO contact_inquiries (name, email, phone, message)
       VALUES (
         ${data.name},
         ${data.email},
