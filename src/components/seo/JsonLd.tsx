@@ -27,7 +27,7 @@ export function JsonLd() {
           "and professionals across India.",
         url: BASE_URL,
         logo: `${BASE_URL}/images/logo.png`,
-        image: `${BASE_URL}/images/about-photo.jpg`,
+        image: `${BASE_URL}/images/about-photo.jpeg`,
         telephone: process.env.NEXT_PUBLIC_WA_NUMBER
           ? `+${process.env.NEXT_PUBLIC_WA_NUMBER}`
           : undefined,
@@ -102,7 +102,7 @@ export function JsonLd() {
           "Certified counselling psychologist with 120-hour CBT training, " +
           "working with young adults, students, and professionals.",
         url: `${BASE_URL}/about`,
-        image: `${BASE_URL}/images/about-photo.jpg`,
+        image: `${BASE_URL}/images/about-photo.jpeg`,
         knowsAbout: [
           "Cognitive Behavioural Therapy",
           "Anxiety",

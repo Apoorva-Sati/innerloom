@@ -35,7 +35,7 @@ export function Hero() {
 
         <div>
           <Image
-            src="/images/hero-photo.jpg"
+            src="/images/aboutMe-photo.jpeg"
             alt="[Name], Counselling Psychologist"
             width={500}
             height={600}
