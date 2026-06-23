@@ -29,48 +29,33 @@ const pillars = [
 
 export function MyApproach() {
   return (
-    <section style={{ padding: "72px 24px", background: "var(--color-ivory)" }}>
-      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-        <p style={{
-          color: "var(--color-teal-mid)", fontSize: "13px",
-          fontWeight: "500", textTransform: "uppercase",
-          letterSpacing: "0.06em", textAlign: "center",
-          marginBottom: "10px",
-        }}>How I work</p>
-        <h2 style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(26px, 4vw, 38px)",
-          fontWeight: "300", textAlign: "center",
-          color: "var(--color-teal)", marginBottom: "48px",
-        }}>
+    <section className="bg-ivory px-6 py-18">
+      <div className="mx-auto max-w-225">
+        <p className="mb-2.5 text-center text-[13px] font-medium uppercase tracking-[0.06em] text-teal-mid">
+          How I work
+        </p>
+        <h2
+          className="
+            mb-12 text-center font-light
+            text-[clamp(26px,4vw,38px)] text-teal
+          "
+        >
           My approach to therapy
         </h2>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(380px, 1fr))",
-          gap: "24px",
-        }}>
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
           {pillars.map((p) => (
             <div
               key={p.title}
-              style={{
-                background: "var(--color-sand)",
-                borderRadius: "var(--radius-lg)",
-                padding: "28px",
-                display: "flex", gap: "16px",
-              }}
+              className="flex gap-4 rounded-(--radius-lg) bg-sand p-7"
             >
-              <div style={{ fontSize: "28px", flexShrink: "0" }}>{p.icon}</div>
+              <div className="shrink-0 text-[28px]">{p.icon}</div>
               <div>
-                <h3 style={{
-                  fontSize: "16px", color: "var(--color-teal)",
-                  marginBottom: "8px", fontFamily: "var(--font-display)",
-                  fontWeight: "500",
-                }}>{p.title}</h3>
-                <p style={{
-                  fontSize: "14px", color: "var(--color-brown-mid)",
-                  lineHeight: "1.7",
-                }}>{p.desc}</p>
+                <h3 className="mb-2  text-base font-medium text-teal">
+                  {p.title}
+                </h3>
+                <p className="text-sm leading-[1.7] text-brown-mid">
+                  {p.desc}
+                </p>
               </div>
             </div>
           ))}

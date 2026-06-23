@@ -6,7 +6,6 @@ interface ContactData {
   name: string
   email: string
   phone?: string
-  session_type: string
   message: string
 }
 
@@ -19,12 +18,7 @@ export async function sendContactNotification(
   data: ContactData
 ): Promise<SendResult> {
   try {
-    // Format session type for display
-    const sessionLabel: Record<string, string> = {
-      online: "Online (video call)",
-      "in-person": "In-person (clinic)",
-      either: "Either works",
-    }
+
 
     const { error } = await resend.emails.send({
       // ─────────────────────────────────────────────────────────────────
@@ -38,7 +32,7 @@ export async function sendContactNotification(
       to: process.env.ADMIN_EMAIL!,
       replyTo: data.email,   
       subject: `New enquiry from ${data.name} — InnerLoom`,
-      html: buildEmailHtml(data, sessionLabel[data.session_type] ?? data.session_type),
+      html: buildEmailHtml(data)
     })
 
     if (error) {
@@ -57,7 +51,7 @@ export async function sendContactNotification(
 // ── Plain HTML email template ─────────────────────────────────────────────────
 // Inline styles only — email clients strip <style> tags
 
-function buildEmailHtml(data: ContactData, sessionLabel: string): string {
+function buildEmailHtml(data: ContactData): string {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -103,10 +97,6 @@ function buildEmailHtml(data: ContactData, sessionLabel: string): string {
                   <td style="padding:8px 0;border-bottom:1px solid #EDE5D8">
                     ${data.phone ? escapeHtml(data.phone) : "Not provided"}
                   </td>
-                </tr>
-                <tr>
-                  <td style="padding:8px 0;color:#7A6859">Session type</td>
-                  <td style="padding:8px 0">${escapeHtml(sessionLabel)}</td>
                 </tr>
               </table>
             </td>

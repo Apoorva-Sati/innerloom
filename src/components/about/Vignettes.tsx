@@ -25,58 +25,37 @@ const stories = [
 
 export function Vignettes() {
   return (
-    <section style={{ padding: "72px 24px", background: "var(--color-ivory)" }}>
-      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-        <p style={{
-          color: "var(--color-teal-mid)", fontSize: "13px",
-          fontWeight: "500", textTransform: "uppercase",
-          letterSpacing: "0.06em", textAlign: "center",
-          marginBottom: "10px",
-        }}>
+    <section className="bg-ivory px-6 py-18">
+      <div className="mx-auto max-w-225">
+        <p className="mb-2.5 text-center text-[13px] font-medium uppercase tracking-[0.06em] text-teal-mid">
           Stories of change
         </p>
-        <h2 style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(26px, 4vw, 38px)",
-          fontWeight: "300", textAlign: "center",
-          color: "var(--color-teal)", marginBottom: "12px",
-        }}>
+        <h2
+          className="
+            mb-3 text-center font-light
+            text-[clamp(26px,4vw,38px)] text-teal
+          "
+        >
           People I've worked with
         </h2>
-        <p style={{
-          textAlign: "center", fontSize: "13px",
-          color: "var(--color-brown-mid)", marginBottom: "48px",
-        }}>
+        <p className="mb-12 text-center text-[13px] text-brown-mid">
           All stories are anonymised composites. Identifying details have been changed.
         </p>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: "24px",
-        }}>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {stories.map((s) => (
             <div
               key={s.persona}
-              style={{
-                background: "var(--color-sand)",
-                borderRadius: "var(--radius-lg)",
-                padding: "28px",
-                borderTop: "3px solid var(--color-terra)",
-              }}
+              className="rounded-(--radius-lg) border-t-[3px] border-t-terra bg-sand p-7"
             >
-              <p style={{
-                fontSize: "12px", color: "var(--color-terra)",
-                fontWeight: "600", textTransform: "uppercase",
-                letterSpacing: "0.05em", marginBottom: "6px",
-              }}>{s.persona}</p>
-              <p style={{
-                fontSize: "14px", fontWeight: "600",
-                color: "var(--color-teal)", marginBottom: "12px",
-              }}>{s.challenge}</p>
-              <p style={{
-                fontSize: "14px", color: "var(--color-brown-mid)",
-                lineHeight: "1.7",
-              }}>{s.outcome}</p>
+              <p className="mb-1.5 text-[12px] font-semibold uppercase tracking-wider text-terra">
+                {s.persona}
+              </p>
+              <p className="mb-3 text-sm font-semibold text-teal">
+                {s.challenge}
+              </p>
+              <p className="text-sm leading-[1.7] text-brown-mid">
+                {s.outcome}
+              </p>
             </div>
           ))}
         </div>

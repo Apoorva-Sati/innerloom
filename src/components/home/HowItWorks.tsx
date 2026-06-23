@@ -4,7 +4,7 @@ const steps = [
   { num: "2", title: "Free discovery call",
     desc: "A 15-minute call to see if we're a good fit. Completely free." },
   { num: "3", title: "Begin your journey",
-    desc: "Start weekly sessions — online or in-person, your choice." },
+    desc: "Start weekly sessions — online." },
 ]
 
 export default function HowItWorks() {

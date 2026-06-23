@@ -1,52 +1,47 @@
 const creds = [
-  { label: "Education",    value: "M.A. / M.Sc. Applied Psychology — [University]" },
+  { label: "Education",     value: "M.Sc. Applied Psychology — Doon University" },
   { label: "Certification", value: "CBT Practitioner — 120-hour accredited course" },
-  { label: "Experience",   value: "5+ years · 300+ individual clients" },
+  { label: "Experience",    value: "2+ years · 20+ individual clients" },
   { label: "Modalities",   value: "CBT · ACT · Mindfulness-based techniques" },
-  { label: "Languages",    value: "English · Hindi · [your language]" },
-  { label: "Sessions",     value: "Online (pan-India) · In-person ([City])" },
+  { label: "Languages",    value: "English · Hindi" },
+  { label: "Sessions",     value: "Online (pan-India)" },
 ]
 
 export function Credentials() {
   return (
-    <section style={{
-      background: "var(--color-sand)", padding: "72px 24px",
-    }}>
-      <div style={{ maxWidth: "720px", margin: "0 auto" }}>
-        <h2 style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(26px, 4vw, 36px)",
-          fontWeight: "300", textAlign: "center",
-          color: "var(--color-teal)", marginBottom: "40px",
-        }}>
-          Qualifications & training
+    <section className="bg-sand `py-18 px-6">
+      <div className="max-w-180 mx-auto">
+        <h2
+          className="
+             font-light text-center
+            text-teal mb-10
+            text-[clamp(26px,4vw,36px)]
+          "
+        >
+          Qualifications &amp; training
         </h2>
-        <dl style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+
+        <dl className="flex flex-col">
           {creds.map((c, i) => (
             <div
               key={c.label}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "140px 1fr",
-                gap: "16px",
-                padding: "18px 0",
-                borderBottom: i < creds.length - 1
-                  ? "1px solid var(--color-peach)"
-                  : "none",
-                alignItems: "baseline",
-              }}
+              className={`
+                grid gap-4 py-4.5 items-baseline
+                grid-cols-[140px_1fr]
+                ${i < creds.length - 1 ? "border-b border-peach" : ""}
+              `}
             >
-              <dt style={{
-                fontSize: "12px", fontWeight: "600",
-                color: "var(--color-teal-mid)",
-                textTransform: "uppercase", letterSpacing: "0.05em",
-              }}>
+              <dt
+                className="
+                  text-xs font-semibold tracking-wider uppercase
+                  text-teal-mid
+                "
+              >
                 {c.label}
               </dt>
-              <dd style={{
-                fontSize: "15px", color: "var(--color-brown)",
-                lineHeight: "1.5",
-              }}>
+              <dd
+                className="text-[15px] leading-relaxed text-brown"
+              >
                 {c.value}
               </dd>
             </div>
@@ -55,4 +50,4 @@ export function Credentials() {
       </div>
     </section>
   )
-}   
+}

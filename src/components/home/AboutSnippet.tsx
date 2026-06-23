@@ -4,104 +4,52 @@ import Link from "next/link"
 
 export default function AboutSnippet() {
   return (
-    <section
-      style={{
-        background: "var(--color-peach)",
-        padding: "72px 24px",
-      }}
-    >
+    <section className="bg-peach px-6 py-18">
       <div
-        style={{
-          maxWidth: "1100px",
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1fr 1.6fr",
-          gap: "56px",
-          alignItems: "center",
-        }}
+        className="
+          mx-auto grid max-w-275 items-center gap-14
+          grid-cols-1 md:grid-cols-[1fr_1.6fr]
+        "
       >
         {/* Photo */}
-        <div style={{ position: "relative" }}>
-          <div
-            style={{
-              position: "absolute",
-              inset: "-10px -10px 10px 10px",
-              border: "1.5px solid var(--color-terra)",
-              borderRadius: "var(--radius-xl)",
-              opacity: 0.35,
-              pointerEvents: "none",
-            }}
-          />
+        <div className=" mx-auto w-full max-w-sm md:max-w-none">
+          <div/>
           <Image
-            src="/images/about-photo.jpg"
-            alt="[Name], Counselling Psychologist"
+            src="/images/about-photo.jpeg"
+            alt="Parishkriti, Counselling Psychologist"
             width={420}
             height={500}
-            style={{
-              borderRadius: "var(--radius-xl)",
-              width: "100%",
-              height: "auto",
-              display: "block",
-              position: "relative",
-            }}
+            className=" h-auto w-full rounded-(--radius-xl)"
           />
         </div>
 
         {/* Copy */}
         <div>
-          <p
-            style={{
-              color: "var(--color-terra)",
-              fontSize: "13px",
-              fontWeight: 500,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              marginBottom: "14px",
-            }}
-          >
+          <p className="mb-3.5 text-[13px] font-medium uppercase tracking-[0.08em] text-terra">
             A little about me
           </p>
 
           <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(28px, 3.5vw, 42px)",
-              fontWeight: 300,
-              lineHeight: 1.25,
-              color: "var(--color-teal)",
-              marginBottom: "20px",
-            }}
+            className="
+              mb-5 font-light leading-tight
+              text-[clamp(28px,3.5vw,42px)] text-teal
+            "
           >
             I believe healing happens in a space where you feel truly heard.
           </h2>
 
-          <p
-            style={{
-              fontSize: "16px",
-              color: "var(--color-brown-mid)",
-              lineHeight: 1.75,
-              marginBottom: "14px",
-            }}
-          >
+          <p className="mb-3.5 text-base leading-[1.75] text-brown-mid">
             I'm a counselling psychologist with a 120-hour CBT certification,
-            working with young adults, students, and professionals across India —
-            both online and in person.
+            working with young adults, students, and professionals across India — online.
           </p>
 
-          <p
-            style={{
-              fontSize: "16px",
-              color: "var(--color-brown-mid)",
-              lineHeight: 1.75,
-              marginBottom: "32px",
-            }}
-          >
+          <p className="mb-8 text-base leading-[1.75] text-brown-mid">
             My approach is warm, collaborative, and rooted in evidence-based
             therapy. I draw on Cognitive Behavioural Therapy alongside other
             methods, tailoring each session to what you actually need.
           </p>
 
-          <Link href="/about" className="btn-secondary" style={{ display: "inline-block" }}>
+          <Link href="/about" className="btn-secondary inline-block">
             Learn more about me →
           </Link>
         </div>

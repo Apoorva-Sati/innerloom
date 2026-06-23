@@ -1,4 +1,4 @@
-import { AboutHero } from "@/components/about/AboutHero"
+import { AboutMe } from "@/components/about/AboutMe"
 import { Credentials } from "@/components/about/Credentials"
 import { MyApproach } from "@/components/about/MyApproach"
 import { Vignettes } from "@/components/about/Vignettes"
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <AboutHero />
+      <AboutMe />
       <MyApproach />
       <Credentials />
       <Vignettes />

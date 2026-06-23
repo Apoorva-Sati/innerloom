@@ -17,10 +17,6 @@ export const ContactSchema = z.object({
     .optional()
     .or(z.literal("")),
 
-  session_type: z.enum(["online", "in-person", "either"], {
-    error: "Please select a session type",
-  }),
-
   message: z
     .string()
     .min(10, "Please share a bit more (at least 10 characters)")
@@ -36,7 +32,6 @@ export const ContactSchema = z.object({
 
 export type ContactFormData = z.infer<typeof ContactSchema>
 
-// Shape of field-level errors returned to the client
 export type ContactFormErrors = Partial<
   Record<keyof ContactFormData, string[]>
 >

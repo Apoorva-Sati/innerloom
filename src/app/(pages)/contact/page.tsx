@@ -4,65 +4,62 @@ import { ContactForm } from "@/components/shared/ContactForm"
 export const metadata: Metadata = {
   title: "Book a Session",
   description:
-    "Book an online or in-person counselling session with Apoorva. " +
+    "Book an online counselling session with Parishkriti. " +
     "Free 15-minute discovery call available. WhatsApp enquiries welcome.",
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/contact`,
   },
 }
 
+const steps = [
+  {
+    icon: "📩",
+    title: "I receive your message",
+    desc: "Your enquiry is saved securely and I get notified right away.",
+  },
+  {
+    icon: "📞",
+    title: "I reach out within 24 hrs",
+    desc: "I'll reply by email or call to schedule a free 15-min discovery call.",
+  },
+  {
+    icon: "🌿",
+    title: "We begin",
+    desc: "If we're a good fit, we book your first full session.",
+  },
+]
+
+const crisisLines = [
+  { name: "iCall (TISS)",          number: "9152987821" },
+  { name: "Vandrevala Foundation", number: "1860-2662-345" },
+  { name: "AASRA",                 number: "9820466627" },
+]
+
 export default function ContactPage() {
   return (
     <main>
       {/* ── Page hero ── */}
-      <section
-        style={{
-          background: "var(--color-sand, #EDE5D8)",
-          padding: "64px 24px 48px",
-          textAlign: "center",
-        }}
-      >
-        <p
-          style={{
-            fontSize: "13px",
-            fontWeight: 500,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            color: "#5A8A8D",
-            marginBottom: "12px",
-          }}
-        >
+      <section className="bg-sand px-6 pt-16 pb-12 text-center">
+        <p className="mb-3 text-[13px] font-medium tracking-[0.08em] uppercase text-teal-mid">
           Let&apos;s talk
         </p>
         <h1
-          style={{
-            fontFamily: "'Cormorant Garamond', Georgia, serif",
-            fontSize: "clamp(32px, 5vw, 48px)",
-            fontWeight: 300,
-            color: "#3D6B6E",
-            marginBottom: "16px",
-            lineHeight: 1.2,
-          }}
+          className="
+            mb-4 font-display font-light leading-[1.2]
+            text-[clamp(32px,5vw,48px)] text-teal
+          "
         >
           Reaching out takes courage.
           <br />I&apos;ll make it easy.
         </h1>
-        <p
-          style={{
-            fontSize: "17px",
-            color: "#7A6859",
-            maxWidth: "520px",
-            margin: "0 auto",
-            lineHeight: 1.7,
-          }}
-        >
+        <p className="mx-auto max-w-130 text-[17px] leading-[1.7] text-brown-mid">
           Fill in the form below and I&apos;ll reply within 24 hours. Prefer
           WhatsApp?{" "}
           <a
             href={`https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER}?text=Hi%2C+I'd+like+to+book+a+session`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "#3D6B6E", fontWeight: 500, textDecoration: "none" }}
+            className="font-medium text-teal no-underline"
           >
             Message me directly →
           </a>
@@ -71,26 +68,19 @@ export default function ContactPage() {
 
       {/* ── Two-column layout: form + sidebar ── */}
       <section
-        style={{
-          maxWidth: "1000px",
-          margin: "0 auto",
-          padding: "48px 24px 80px",
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1fr)",
-          gap: "48px",
-          alignItems: "start",
-        }}
+        className="
+          mx-auto grid max-w-250 items-start gap-12
+          px-6 pt-12 pb-20
+          grid-cols-1 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]
+        "
       >
         {/* Left: form */}
         <div>
           <h2
-            style={{
-              fontFamily: "'Cormorant Garamond', Georgia, serif",
-              fontSize: "24px",
-              fontWeight: 400,
-              color: "#3D6B6E",
-              marginBottom: "24px",
-            }}
+            className="
+              mb-6 font-display
+              text-2xl font-normal text-teal
+            "
           >
             Send me a message
           </h2>
@@ -98,73 +88,28 @@ export default function ContactPage() {
         </div>
 
         {/* Right: sidebar info */}
-        <aside
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "24px",
-          }}
-        >
+        <aside className="flex flex-col gap-6">
           {/* What happens next */}
-          <div
-            style={{
-              background: "#F7F2EB",
-              borderRadius: "16px",
-              padding: "24px",
-              border: "1px solid #E8D5C4",
-            }}
-          >
+          <div className="rounded-2xl border border-peach bg-ivory p-6">
             <h3
-              style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: "20px",
-                fontWeight: 400,
-                color: "#3D6B6E",
-                marginBottom: "16px",
-              }}
+              className="
+                mb-4 font-display
+                text-xl font-normal text-teal
+              "
             >
               What happens next?
             </h3>
-            {[
-              {
-                icon: "📩",
-                title: "I receive your message",
-                desc: "Your enquiry is saved securely and I get notified right away.",
-              },
-              {
-                icon: "📞",
-                title: "I reach out within 24 hrs",
-                desc: "I'll reply by email or call to schedule a free 15-min discovery call.",
-              },
-              {
-                icon: "🌿",
-                title: "We begin",
-                desc: "If we're a good fit, we book your first full session.",
-              },
-            ].map((step, i) => (
+            {steps.map((step, i) => (
               <div
                 key={i}
-                style={{
-                  display: "flex",
-                  gap: "12px",
-                  marginBottom: i < 2 ? "16px" : 0,
-                }}
+                className={`flex gap-3 ${i < steps.length - 1 ? "mb-4" : ""}`}
               >
-                <span style={{ fontSize: "20px", flexShrink: 0 }}>
-                  {step.icon}
-                </span>
+                <span className="shrink-0 text-xl">{step.icon}</span>
                 <div>
-                  <p
-                    style={{
-                      fontWeight: 500,
-                      fontSize: "14px",
-                      color: "#4A3728",
-                      marginBottom: "2px",
-                    }}
-                  >
+                  <p className="mb-0.5 text-sm font-medium text-brown">
                     {step.title}
                   </p>
-                  <p style={{ fontSize: "13px", color: "#7A6859", lineHeight: 1.5 }}>
+                  <p className="text-[13px] leading-normal text-brown-mid">
                     {step.desc}
                   </p>
                 </div>
@@ -173,21 +118,8 @@ export default function ContactPage() {
           </div>
 
           {/* Confidentiality note */}
-          <div
-            style={{
-              background: "#EBF4F4",
-              borderRadius: "12px",
-              padding: "16px 20px",
-              border: "1px solid #B8D8D8",
-            }}
-          >
-            <p
-              style={{
-                fontSize: "13px",
-                color: "#3D6B6E",
-                lineHeight: 1.6,
-              }}
-            >
+          <div className="rounded-xl border border-[#B8D8D8] bg-[#EBF4F4] px-5 py-4">
+            <p className="text-[13px] leading-[1.6] text-teal">
               🔒 <strong>Confidential:</strong> Everything you share is private.
               I follow strict professional and ethical guidelines to protect your
               information.
@@ -195,58 +127,26 @@ export default function ContactPage() {
           </div>
 
           {/* Response time */}
-          <div
-            style={{
-              background: "#F7F2EB",
-              borderRadius: "12px",
-              padding: "16px 20px",
-              border: "1px solid #E8D5C4",
-            }}
-          >
-            <p style={{ fontSize: "13px", color: "#7A6859", lineHeight: 1.6 }}>
-              ⏰ <strong style={{ color: "#4A3728" }}>Response time:</strong>{" "}
+          <div className="rounded-xl border border-peach bg-ivory px-5 py-4">
+            <p className="text-[13px] leading-[1.6] text-brown-mid">
+              ⏰ <strong className="text-brown">Response time:</strong>{" "}
               I reply within 24 hours on weekdays. For urgent support, please use
               the crisis lines below.
             </p>
           </div>
 
           {/* Crisis box */}
-          <div
-            style={{
-              background: "#FEF2F2",
-              borderRadius: "12px",
-              padding: "16px 20px",
-              border: "1px solid #FECACA",
-            }}
-          >
-            <p
-              style={{
-                fontSize: "13px",
-                fontWeight: 500,
-                color: "#B91C1C",
-                marginBottom: "8px",
-              }}
-            >
+          <div className="rounded-xl border border-[#FECACA] bg-[#FEF2F2] px-5 py-4">
+            <p className="mb-2 text-[13px] font-medium text-[#B91C1C]">
               In crisis? Immediate help is available:
             </p>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {[
-                { name: "iCall (TISS)", number: "9152987821" },
-                { name: "Vandrevala Foundation", number: "1860-2662-345" },
-                { name: "AASRA", number: "9820466627" },
-              ].map((line) => (
-                <li
-                  key={line.name}
-                  style={{
-                    fontSize: "13px",
-                    color: "#7A6859",
-                    padding: "3px 0",
-                  }}
-                >
-                  <strong style={{ color: "#4A3728" }}>{line.name}:</strong>{" "}
+            <ul className="m-0 list-none p-0">
+              {crisisLines.map((line) => (
+                <li key={line.name} className="py-0.5 text-[13px] text-brown-mid">
+                  <strong className="text-brown">{line.name}:</strong>{" "}
                   <a
                     href={`tel:${line.number.replace(/-/g, "")}`}
-                    style={{ color: "#B91C1C", fontWeight: 500 }}
+                    className="font-medium text-[#B91C1C]"
                   >
                     {line.number}
                   </a>
@@ -256,15 +156,6 @@ export default function ContactPage() {
           </div>
         </aside>
       </section>
-
-      {/* ── Mobile: stack columns ── */}
-      <style>{`
-        @media (max-width: 700px) {
-          section:last-of-type {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </main>
   )
 }

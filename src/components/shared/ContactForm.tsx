@@ -343,53 +343,7 @@ export function ContactForm() {
           <FieldError messages={errors.phone} />
         </span>
       </div>
-
-      {/* ── Row 4: Session type ── */}
-      <div>
-        <Label htmlFor="session_type" required>
-          How would you like to meet?
-        </Label>
-        <div style={{ position: "relative" }}>
-          <select
-            id="session_type"
-            name="session_type"
-            defaultValue=""
-            disabled={isLoading}
-            aria-invalid={!!errors.session_type}
-            aria-describedby={errors.session_type ? "session-error" : undefined}
-            style={{
-              ...inputBase,
-              ...(errors.session_type ? inputError : {}),
-              appearance: "none",
-              WebkitAppearance: "none",
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237A6859' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 14px center",
-              paddingRight: "40px",
-              opacity: isLoading ? 0.6 : 1,
-              cursor: "pointer",
-            }}
-            onFocus={(e) => {
-              if (!errors.session_type) e.target.style.borderColor = "#3D6B6E"
-            }}
-            onBlur={(e) => {
-              if (!errors.session_type) e.target.style.borderColor = "#D6C9B8"
-            }}
-          >
-            <option value="" disabled>
-              Select an option…
-            </option>
-            <option value="online">💻 Online (video call)</option>
-            <option value="in-person">🏠 In-person (clinic visit)</option>
-            <option value="either">🌿 Either works for me</option>
-          </select>
-        </div>
-        <span id="session-error">
-          <FieldError messages={errors.session_type} />
-        </span>
-      </div>
-
-      {/* ── Row 5: Message ── */}
+      {/* ── Row 4: Message ── */}
       <div>
         <Label htmlFor="message" required>
           What brings you here?
@@ -427,7 +381,7 @@ export function ContactForm() {
         </span>
       </div>
 
-      {/* ── Row 6: Consent checkbox ── */}
+      {/* ── Row 5: Consent checkbox ── */}
       <div>
         <label
           style={{

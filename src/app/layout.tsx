@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { CrisisBanner } from "@/components/layout/CrisisBanner"
-import { CardFooter } from "@/components/ui/card"
+import Footer from "@/components/layout/Footer"
 import { Toaster } from "@/components/ui/toaster"
 import Navbar from "@/components/layout/Navbar"
 import { WhatsAppFAB } from "@/components/shared/WhatsAppFAB"
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: "Counselling Psychologist India | [Name]",
   },
   description:
-    "Warm, CBT-based online & in-person counselling for " +
+    "Warm, CBT-based online counselling for " +
     "young adults, professionals & students across India.",
   openGraph: {
     type: "website",
@@ -38,9 +38,9 @@ export default function RootLayout({
         <CrisisBanner />
         <Navbar />
         <main id="main">{children}</main>
-        <CardFooter />
+        <Footer />
         <Toaster />
-        <WhatsAppFAB/>
+        <WhatsAppFAB />
       </body>
     </html>
   )
