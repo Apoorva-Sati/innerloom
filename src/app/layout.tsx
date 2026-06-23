@@ -37,7 +37,7 @@ export const metadata: Metadata = {
       "students across India. Book a free 15-minute discovery call today.",
     images: [
       {
-        url: `${BASE_URL}/images/AboutMe-photo.jpeg`, // create a 1200×630 image
+url: `${BASE_URL}/images/hero-photo.jpg`,
         width: 1200,
         height: 630,
         alt: "Innerloom — Counselling by Parishkriti Bamrara",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     description:
       "Warm, CBT-based online counselling for young adults, professionals & " +
       "students across India.",
-    images: [`${BASE_URL}/images/AboutMe-photo.jpeg`],
+    images: [`${BASE_URL}/images/hero-photo.jpg`],
   },
 
   // ── Indexing ───────────────────────────────────────────────────────────
@@ -68,12 +68,6 @@ export const metadata: Metadata = {
     },
   },
 
-  // ── Icons ──────────────────────────────────────────────────────────────
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
-  },
 
   // ── Verification (add when you connect Google Search Console) ──────────
   // verification: {
