@@ -17,7 +17,7 @@ export default function AboutPage() {
       <AboutMe />
       <MyApproach />
       <Credentials />
-      <Vignettes />
+      {/* <Vignettes /> */}
     </>
   )
 }

@@ -82,10 +82,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en-IN">
-      <head>
-        <JsonLd />
-      </head>
       <body>
+                <JsonLd />
         <a href="#main" className="sr-only focus:not-sr-only">
           Skip to content
         </a>

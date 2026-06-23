@@ -47,7 +47,6 @@ export default function PrivacyPage() {
         <li>Your name</li>
         <li>Your email address</li>
         <li>Your phone number (optional)</li>
-        <li>Your preferred session type (online)</li>
         <li>The message you write to us</li>
       </ul>
       <p>
