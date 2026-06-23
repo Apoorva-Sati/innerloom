@@ -1,36 +1,174 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Innerloom
+
+Professional website for **Parishkriti Bamrara**, Counselling Psychologist — offering warm, CBT-based online counselling for young adults, students, and professionals across India.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) + TypeScript |
+| Styling | Tailwind CSS v4 + shadcn/ui (radix-nova) |
+| Email | Resend |
+| Database | Neon (serverless Postgres) |
+| Validation | Zod |
+| Hosting | Vercel |
+| CDN / DNS | Cloudflare |
+| Analytics | Plausible (post-launch) |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── (pages)/
+│   │   ├── about/          → /about
+│   │   ├── contact/        → /contact
+│   │   ├── privacy/        → /privacy
+│   │   └── terms/          → /terms
+│   ├── api/
+│   │   └── contact/        → POST /api/contact
+│   ├── layout.tsx           → root layout + SEO metadata + JSON-LD
+│   ├── page.tsx             → home page
+│   ├── sitemap.ts           → /sitemap.xml
+│   └── robots.ts            → /robots.txt
+├── components/
+│   ├── layout/
+│   │   ├── Navbar.tsx
+│   │   ├── Footer.tsx
+│   │   ├── CrisisBanner.tsx
+│   │   └── LegalLayout.tsx
+│   ├── home/
+│   │   ├── Hero.tsx
+│   │   ├── WhoIHelp.tsx
+│   │   ├── HowItWorks.tsx
+│   │   ├── AboutSnippet.tsx
+│   │   ├── TrustBar.tsx
+│   │   └── HomeCTA.tsx
+│   ├── about/
+│   │   ├── AboutMe.tsx
+│   │   ├── MyApproach.tsx
+│   │   ├── Credentials.tsx
+│   │   └── Vignettes.tsx
+│   ├── seo/
+│   │   └── JsonLd.tsx
+│   └── shared/
+│       ├── ContactForm.tsx
+│       └── WhatsAppFAB.tsx
+└── lib/
+    ├── db/
+    │   ├── neon.ts          → Neon client
+    │   └── submissions.ts   → insert contact submission
+    ├── resend/
+    │   └── send.ts          → email template + Resend call
+    ├── validations/
+    │   └── contact.ts       → Zod schema
+    └── ratelimit.ts         → in-memory rate limiter
+```
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js >= 20
+- npm
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Environment variables
+
+Create a `.env.local` file in the root:
+
+```env
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_WA_NUMBER=91xxxxxxxxxx
+
+RESEND_API_KEY=re_xxxx
+ADMIN_EMAIL=example@gmail.com
+
+DATABASE_URL=postgresql://your-neon-connection-string
+```
+
+### Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Full site URL — `https://innerloom.in` in production |
+| `NEXT_PUBLIC_WA_NUMBER` | WhatsApp number with country code, no `+` (e.g. `919876543210`) |
+| `RESEND_API_KEY` | API key from resend.com |
+| `ADMIN_EMAIL` | Gmail inbox that receives contact form submissions |
+| `DATABASE_URL` | Neon serverless Postgres connection string |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact Form Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+User submits form
+      ↓
+Rate limiter (3 req / 10 min per IP)
+      ↓
+Honeypot check (silent discard if bot)
+      ↓
+Zod validation
+      ↓
+Resend → Gmail inbox        ← critical path
+      ↓
+Neon DB insert              ← best-effort (failure doesn't surface to user)
+      ↓
+200 OK → success state shown
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Branch Strategy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Branch | Purpose |
+|---|---|
+| `dev` | Active development |
+| `prod` | Production — auto-deploys to Vercel |
+
+Merge `dev → prod` when ready to ship a release.
+
+---
+
+## Deployment
+
+Hosted on **Vercel**. Every push to `prod` triggers an automatic deployment.
+
+Add all environment variables listed above in:
+Vercel Dashboard → Project → Settings → Environment Variables
+
+## Crisis Resources
+
+The site displays Indian mental health crisis lines throughout:
+
+| Organisation | Number |
+|---|---|
+| iCall (TISS) | 9152987821 |
+| Vandrevala Foundation | 1860-2662-345 (24/7) |
+| AASRA | 9820466627 |
+| NIMHANS | 080-46110007 |
+
+---
+
+*Built by [Apoorva Sati](https://github.com/Apoorva-Sati)*
