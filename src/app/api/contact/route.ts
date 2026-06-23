@@ -1,25 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
 import { ContactSchema } from "@/lib/validations/contact"
-import crypto from "crypto"
-import { createClient } from "@/lib/supabase/server"
 import { sendContactNotification } from "@/lib/resend/send"
-
-function hashIp(ip: string): string {
-  return crypto.createHash("sha256").update(ip).digest("hex")
-}
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
 
-    // ── 1. Honeypot check ───────────────────────────────────────────
-    // If the hidden _honey field is filled in, it's a bot.
-    // Return 200 silently so bots think they succeeded.
+    // 1. Honeypot — bots fill this hidden field, humans never see it
     if (body._honey) {
-      return NextResponse.json({ ok: true })
+      return NextResponse.json({ ok: true }) // silent discard
     }
 
-    // ── 2. Validate with Zod ────────────────────────────────────────
+    // 2. Validate with Zod
     const result = ContactSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
@@ -28,28 +20,19 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Pull out fields that shouldn't go to the DB
-    const { _honey: _h, consent: _c, ...dbData } = result.data
+    // Strip fields that shouldn't go in the email
+    const { _honey: _h, consent: _c, ...formData } = result.data
 
-    // ── 3. Save to Supabase ─────────────────────────────────────────
-    const supabase = await createClient()
-    const ip = req.headers.get("x-forwarded-for") ?? "unknown"
+    // 3. Send email via Resend
+    const emailResult = await sendContactNotification(formData)
 
-    const { error: dbError } = await supabase
-      .from("contact_inquiries")
-      .insert({
-        ...dbData,
-        ip_hash: hashIp(ip),
-      })
-
-    if (dbError) {
-      console.error("[Supabase] Insert failed:", dbError)
+    if (!emailResult.success) {
+      console.error("[Contact API] Email failed:", emailResult.error)
       return NextResponse.json(
-        { error: "Something went wrong. Please try again." },
+        { error: "Failed to send your message. Please try WhatsApp instead." },
         { status: 500 }
       )
     }
-    await sendContactNotification(dbData)
 
     return NextResponse.json({ ok: true })
   } catch (err) {

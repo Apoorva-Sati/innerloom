@@ -473,44 +473,32 @@ export function ContactForm() {
 
       {/* ── Submit button ── */}
       <button
-        type="submit"
-        disabled={isLoading}
-        aria-busy={isLoading}
-        style={{
-          width: "100%",
-          padding: "14px 24px",
-          fontSize: "16px",
-          fontWeight: 500,
-          color: "white",
-          backgroundColor: isLoading ? "#A5644A" : "#C17B5C",
-          border: "none",
-          borderRadius: "12px",
-          cursor: isLoading ? "not-allowed" : "pointer",
-          transition: "background-color 0.2s",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "10px",
-          minHeight: "52px", // large touch target on mobile
-        }}
-        onMouseEnter={(e) => {
-          if (!isLoading)
-            (e.target as HTMLButtonElement).style.backgroundColor = "#A5644A"
-        }}
-        onMouseLeave={(e) => {
-          if (!isLoading)
-            (e.target as HTMLButtonElement).style.backgroundColor = "#C17B5C"
-        }}
-      >
-        {isLoading ? (
-          <>
-            <Spinner />
-            Sending…
-          </>
-        ) : (
-          "Send message"
-        )}
-      </button>
+  type="submit"
+  disabled={isLoading}
+  aria-busy={isLoading}
+  className={`
+    w-full min-h-13
+    flex items-center justify-center gap-2.5
+    rounded-xl
+    px-6 py-3.5
+    text-base font-medium text-white
+    transition-colors
+    ${
+      isLoading
+        ? "bg-terra-dark cursor-not-allowed"
+        : "bg-terra hover:bg-terra-dark cursor-pointer"
+    }
+  `}
+>
+  {isLoading ? (
+    <>
+      <Spinner />
+      Sending...
+    </>
+  ) : (
+    "Send message"
+  )}
+</button>
 
       {/* ── Crisis note ── */}
       <p

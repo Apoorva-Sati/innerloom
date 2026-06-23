@@ -10,64 +10,161 @@ interface ContactData {
   message: string
 }
 
-export async function sendContactNotification(data: ContactData) {
+interface SendResult {
+  success: boolean
+  error?: string
+}
+
+export async function sendContactNotification(
+  data: ContactData
+): Promise<SendResult> {
   try {
-    await resend.emails.send({
-      // During testing use: onboarding@resend.dev
-      // After domain verification use: noreply@yourdomain.in
-      from: "InnerLoom Website <onboarding@resend.dev>",
+    // Format session type for display
+    const sessionLabel: Record<string, string> = {
+      online: "Online (video call)",
+      "in-person": "In-person (clinic)",
+      either: "Either works",
+    }
+
+    const { error } = await resend.emails.send({
+      // ─────────────────────────────────────────────────────────────────
+      // During testing (before domain verification):
+      //   from: "onboarding@resend.dev"
+      //
+      // After you verify your domain on resend.com, change to:
+      //   from: "website@yourdomain.in"
+      // ─────────────────────────────────────────────────────────────────
+      from: "onboarding@resend.dev",
       to: process.env.ADMIN_EMAIL!,
-      replyTo: data.email, // so you can reply directly to the client
-      subject: `New enquiry from ${data.name}`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 560px; margin: 0 auto;
-          background: #F7F2EB; padding: 32px; border-radius: 12px;">
-          <h2 style="color: #3D6B6E; margin-bottom: 4px;">
-            New enquiry from ${data.name}
-          </h2>
-          <p style="color: #7A6859; font-size: 13px; margin-top: 0;">
-            Received via InnerLoom contact form
-          </p>
-          <hr style="border: none; border-top: 1px solid #E8D5C4; margin: 20px 0;" />
-
-          <table style="width: 100%; font-size: 14px; color: #4A3728;">
-            <tr>
-              <td style="padding: 6px 0; font-weight: 600; width: 140px;">Name</td>
-              <td style="padding: 6px 0;">${data.name}</td>
-            </tr>
-            <tr>
-              <td style="padding: 6px 0; font-weight: 600;">Email</td>
-              <td style="padding: 6px 0;">${data.email}</td>
-            </tr>
-            <tr>
-              <td style="padding: 6px 0; font-weight: 600;">Phone</td>
-              <td style="padding: 6px 0;">${data.phone || "Not provided"}</td>
-            </tr>
-            <tr>
-              <td style="padding: 6px 0; font-weight: 600;">Session type</td>
-              <td style="padding: 6px 0; text-transform: capitalize;">
-                ${data.session_type}
-              </td>
-            </tr>
-          </table>
-
-          <hr style="border: none; border-top: 1px solid #E8D5C4; margin: 20px 0;" />
-
-          <p style="font-weight: 600; color: #4A3728; margin-bottom: 8px;">Message</p>
-          <div style="background: white; padding: 16px; border-radius: 8px;
-            font-size: 14px; color: #4A3728; line-height: 1.6;">
-            ${data.message.replace(/\n/g, "<br/>")}
-          </div>
-
-          <p style="font-size: 12px; color: #7A6859; margin-top: 24px;">
-            Hit reply to respond directly to ${data.email}
-          </p>
-        </div>
-      `,
+      replyTo: data.email,   
+      subject: `New enquiry from ${data.name} — InnerLoom`,
+      html: buildEmailHtml(data, sessionLabel[data.session_type] ?? data.session_type),
     })
+
+    if (error) {
+      return { success: false, error: error.message }
+    }
+
+    return { success: true }
   } catch (err) {
-    // Log but do NOT throw — the form submission should still succeed
-    // even if the notification email fails
-    console.error("[Resend] Failed to send notification:", err)
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error",
+    }
   }
+}
+
+// ── Plain HTML email template ─────────────────────────────────────────────────
+// Inline styles only — email clients strip <style> tags
+
+function buildEmailHtml(data: ContactData, sessionLabel: string): string {
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#F7F2EB;font-family:sans-serif">
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" style="padding:32px 16px">
+        <table width="560" cellpadding="0" cellspacing="0"
+          style="background:#FFFFFF;border-radius:12px;overflow:hidden;max-width:100%">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:#3D6B6E;padding:24px 32px">
+              <p style="margin:0;font-size:12px;color:#9BC4C4;
+                letter-spacing:0.08em;text-transform:uppercase">
+                InnerLoom — New enquiry
+              </p>
+              <h1 style="margin:6px 0 0;font-size:22px;font-weight:400;color:#FFFFFF">
+                ${escapeHtml(data.name)} wants to connect
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Details -->
+          <tr>
+            <td style="padding:24px 32px">
+              <table width="100%" cellpadding="0" cellspacing="0"
+                style="font-size:14px;color:#4A3728">
+                <tr>
+                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8;
+                    color:#7A6859;width:140px">Email</td>
+                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8">
+                    <a href="mailto:${escapeHtml(data.email)}"
+                      style="color:#3D6B6E;text-decoration:none">
+                      ${escapeHtml(data.email)}
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8;
+                    color:#7A6859">Phone</td>
+                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8">
+                    ${data.phone ? escapeHtml(data.phone) : "Not provided"}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0;color:#7A6859">Session type</td>
+                  <td style="padding:8px 0">${escapeHtml(sessionLabel)}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Message -->
+          <tr>
+            <td style="padding:0 32px 24px">
+              <p style="font-size:12px;font-weight:600;color:#7A6859;
+                letter-spacing:0.06em;text-transform:uppercase;margin:0 0 8px">
+                Their message
+              </p>
+              <div style="background:#F7F2EB;border-radius:8px;
+                padding:16px;font-size:14px;color:#4A3728;line-height:1.7">
+                ${escapeHtml(data.message).replace(/\n/g, "<br>")}
+              </div>
+            </td>
+          </tr>
+
+          <!-- Reply CTA -->
+          <tr>
+            <td style="padding:0 32px 32px">
+              <a href="mailto:${escapeHtml(data.email)}"
+                style="display:inline-block;background:#C17B5C;color:#FFFFFF;
+                  font-size:14px;font-weight:500;padding:12px 24px;
+                  border-radius:8px;text-decoration:none">
+                Reply to ${escapeHtml(data.name)} →
+              </a>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#F7F2EB;padding:16px 32px;
+              border-top:1px solid #EDE5D8">
+              <p style="margin:0;font-size:12px;color:#7A6859">
+                Sent from innerloom.in contact form.
+                This email was generated automatically — do not reply to this address.
+                Hit the button above to reply directly to ${escapeHtml(data.name)}.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim()
+}
+
+// Prevent XSS in email HTML
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;")
 }

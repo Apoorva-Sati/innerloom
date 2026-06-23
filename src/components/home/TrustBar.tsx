@@ -1,4 +1,3 @@
-// src/components/home/TrustBar.tsx
 const trustItems = [
   { value: "CBT Certified",     label: "120-hour course" },
   { value: "Confidential",      label: "All sessions private" },

@@ -1,4 +1,3 @@
-// src/components/home/HomeCTA.tsx
 import Link from "next/link"
 
 export default function HomeCTA() {
