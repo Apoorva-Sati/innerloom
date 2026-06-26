@@ -75,7 +75,7 @@ export default function PrivacyPage() {
 
       <h2>4. Confidentiality in therapy</h2>
       <p>
-        All information shared during counselling sessions — whether in person,
+        All information shared during counselling sessions — whether
         over video call, or in writing — is strictly confidential. We follow the
         ethical guidelines of our professional body and the principles of the
         Mental Healthcare Act, 2017 (India).
