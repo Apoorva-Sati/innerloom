@@ -44,11 +44,16 @@ export async function POST(req: NextRequest) {
     }
 
     // Strip internal fields before passing downstream
-    const { _honey: _h, consent: _c, ...formData } = result.data
+    const { _honey: _h, ...formData } = result.data
 
     // 4. Send email via Resend — critical path
     //    If this fails, we return an error immediately
-    const emailResult = await sendContactNotification(formData)
+    const emailResult = await sendContactNotification({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      message: formData.message,
+    })
 
     if (!emailResult.success) {
       console.error("[Contact API] Email failed:", emailResult.error)

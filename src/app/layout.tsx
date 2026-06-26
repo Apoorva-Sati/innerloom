@@ -1,11 +1,8 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { CrisisBanner } from "@/components/layout/CrisisBanner"
-import Footer from "@/components/layout/Footer"
 import { Toaster } from "@/components/ui/toaster"
-import Navbar from "@/components/layout/Navbar"
-import { WhatsAppFAB } from "@/components/shared/WhatsAppFAB"
 import { JsonLd } from "@/components/seo/JsonLd"
+import { ConditionalLayout } from "@/components/layout/ConditionalLayout"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://innerloom.in"
 
@@ -83,16 +80,9 @@ export default function RootLayout({
   return (
     <html lang="en-IN">
       <body>
-                <JsonLd />
-        <a href="#main" className="sr-only focus:not-sr-only">
-          Skip to content
-        </a>
-        <CrisisBanner />
-        <Navbar />
-        <main id="main">{children}</main>
-        <Footer />
+        <JsonLd />
+        <ConditionalLayout>{children}</ConditionalLayout>
         <Toaster />
-        <WhatsAppFAB />
       </body>
     </html>
   )

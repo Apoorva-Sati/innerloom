@@ -91,13 +91,14 @@ function buildEmailHtml(data: ContactData): string {
                     </a>
                   </td>
                 </tr>
-                <tr>
-                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8;
-                    color:#7A6859">Phone</td>
-                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8">
-                    ${data.phone ? escapeHtml(data.phone) : "Not provided"}
-                  </td>
-                </tr>
+                ${data.phone ? `
+<tr>
+  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8;
+    color:#7A6859">Phone</td>
+  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8">
+    ${escapeHtml(data.phone)}
+  </td>
+</tr>` : ""}
               </table>
             </td>
           </tr>
