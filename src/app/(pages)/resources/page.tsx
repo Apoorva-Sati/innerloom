@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { FadeIn } from '@/components/shared/FadeIn'
 
 export const metadata: Metadata = {
   title: 'Free Mental Health Resources',
@@ -86,7 +87,8 @@ const worksheets = [
 
 export default function ResourcesPage() {
   return (
-    <main className="min-h-screen bg-[#F7F2EB]">
+    <main className="min-h-screen bg-ivory">
+      <FadeIn direction="up">
       {/* Header */}
       <section className="px-6 py-20 text-center max-w-2xl mx-auto">
         <span className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase mb-4 block">
@@ -106,12 +108,12 @@ export default function ResourcesPage() {
         {/* Crisis helplines */}
         <section>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-2 h-2 rounded-full bg-[#C17B5C]" />
-            <h2 className="text-xs font-medium tracking-widest text-[#C17B5C] uppercase">
+            <div className="w-2 h-2 rounded-full bg-terra" />
+            <h2 className="text-xs font-medium tracking-widest text-terra uppercase">
               If you're in crisis
             </h2>
           </div>
-          <div className="bg-[#FDF6F0] border border-[#E8D5C4] rounded-2xl p-6 mb-4">
+          <div className="bg-[#FDF6F0] border border-peach rounded-2xl p-6 mb-4">
             <p className="text-sm text-[#6B6560] mb-6">
               If you are in immediate distress or having thoughts of harming
               yourself, please reach out to one of these free helplines. You
@@ -121,12 +123,12 @@ export default function ResourcesPage() {
               {helplines.map((h) => (
                 <div
                   key={h.name}
-                  className="bg-white rounded-xl border border-[#E8D5C4] p-4"
+                  className="bg-white rounded-xl border border-peach p-4"
                 >
                   <div className="font-medium text-[#2C2C2A] text-sm mb-1">
                     {h.name}
                   </div>
-                  <div className="text-[#C17B5C] font-semibold text-lg mb-1">
+                  <div className="text-terra font-semibold text-lg mb-1">
                     {h.number}
                   </div>
                   <div className="text-xs text-[#9B9590]">{h.desc}</div>
@@ -189,7 +191,7 @@ export default function ResourcesPage() {
                 key={b.title}
                 className="bg-white rounded-2xl border border-[#E8E0D5] p-6 flex gap-4"
               >
-                <div className="w-1 flex-shrink-0 rounded-full bg-[#8BAF8D]" />
+                <div className="w-1 shrink-0 rounded-full bg-sage" />
                 <div>
                   <div className="font-medium text-[#2C2C2A]">{b.title}</div>
                   <div className="text-xs text-[#9B9590] mb-2">{b.author}</div>
@@ -231,7 +233,7 @@ export default function ResourcesPage() {
       </div>
 
       {/* CTA */}
-      <section className="bg-[#EDE5D8] py-16 text-center px-6">
+      <section className="bg-sand py-16 text-center px-6">
         <h2 className="text-2xl font-serif text-[#2C2C2A] mb-3">
           Ready to take the next step?
         </h2>
@@ -243,6 +245,7 @@ export default function ResourcesPage() {
           Book a session
         </a>
       </section>
+      </FadeIn>
     </main>
   )
 }

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
 import { getAllPostSlugs, getPostBySlug } from '@/sanity/lib/queries'
 import { NewsletterSignup } from '@/components/shared/NewsletterSignup'
+import { FadeIn } from '@/components/shared/FadeIn'
 
 export const revalidate = 60
 
@@ -36,6 +37,7 @@ export default async function PostPage({
 
   return (
     <main className="min-h-screen bg-ivory">
+      <FadeIn direction="up">
       {/* Header */}
       <section className="max-w-2xl mx-auto px-6 pt-20 pb-10">
         <div className="flex flex-wrap gap-2 mb-6">
@@ -101,6 +103,7 @@ export default async function PostPage({
           </a>
         </div>
       </section>
+      </FadeIn>
     </main>
   )
 }

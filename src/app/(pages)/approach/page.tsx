@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { FadeIn } from '@/components/shared/FadeIn'
 
 export const metadata: Metadata = {
   title: 'My Counselling Approach | CBT & Person-Centred Therapy',
@@ -83,7 +84,8 @@ const sessionFlow = [
 
 export default function ApproachPage() {
   return (
-    <main className="min-h-screen bg-[#F7F2EB]">
+    <main className="min-h-screen bg-ivory">
+      <FadeIn direction="up">
       {/* Header */}
       <section className="px-6 py-20 text-center max-w-2xl mx-auto">
         <span className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase mb-4 block">
@@ -139,7 +141,7 @@ export default function ApproachPage() {
                 className="bg-white rounded-2xl border border-[#E8E0D5] p-6 flex gap-5"
               >
                 <div
-                  className="w-1 flex-shrink-0 rounded-full"
+                  className="w-1 shrink-0 rounded-full"
                   style={{ background: a.color }}
                 />
                 <div>
@@ -176,7 +178,7 @@ export default function ApproachPage() {
                 key={s.step}
                 className="bg-white rounded-2xl border border-[#E8E0D5] p-6 flex gap-6 items-start"
               >
-                <div className="text-2xl font-serif text-[#E8D5C4] flex-shrink-0 w-8">
+                <div className="text-2xl font-serif text-peach shrink-0 w-8">
                   {s.step}
                 </div>
                 <div>
@@ -210,7 +212,7 @@ export default function ApproachPage() {
       </div>
 
       {/* CTA */}
-      <section className="bg-[#EDE5D8] py-16 text-center px-6">
+      <section className="bg-sand py-16 text-center px-6">
         <h2 className="text-2xl font-serif text-[#2C2C2A] mb-3">
           Sounds like a fit?
         </h2>
@@ -222,6 +224,7 @@ export default function ApproachPage() {
           Book a free discovery call
         </Link>
       </section>
+      </FadeIn>
     </main>
   )
 }
