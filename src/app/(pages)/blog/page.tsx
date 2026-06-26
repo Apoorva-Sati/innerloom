@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllPosts, type Post } from '@/sanity/lib/queries'
+import { FadeIn } from '@/components/shared/FadeIn'
 
 export const revalidate = 60
 
@@ -60,7 +61,8 @@ export default async function BlogPage() {
   const posts = await getAllPosts()
 
   return (
-    <main className="min-h-screen bg-[#F7F2EB]">
+    <main className="min-h-screen bg-ivory">
+      <FadeIn direction="up">
       {/* Header */}
       <section className="px-6 py-20 text-center max-w-2xl mx-auto">
         <span className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase mb-4 block">
@@ -88,6 +90,7 @@ export default async function BlogPage() {
           </div>
         )}
       </section>
+      </FadeIn>
     </main>
   )
 }

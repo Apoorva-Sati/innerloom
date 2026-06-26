@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { FadeIn } from '@/components/shared/FadeIn'
 
 export const metadata: Metadata = {
   title: 'FAQs | Counselling Psychologist India',
@@ -107,7 +108,7 @@ export default function FAQPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-
+<FadeIn direction="up">
       {/* Header */}
       <section className="px-6 py-20 text-center max-w-2xl mx-auto">
         <span className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase mb-4 block">
@@ -166,7 +167,7 @@ export default function FAQPage() {
         <a href="/contact" className="btn-primary inline-block">
           Get in touch
         </a>
-      </section>
+      </section></FadeIn>
     </main>
   )
 }

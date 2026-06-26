@@ -40,7 +40,7 @@ export default function Navbar() {
         </nav>
 
         <button
-          className="md:hidden text-brown"
+          className="md:hidden text-brown p-2"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
