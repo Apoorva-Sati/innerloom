@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless'
-import { cookies } from 'next/headers'
-import Link from 'next/link'
+import { AdminNav } from '@/components/admin/AdminNav'
+import { requireAdmin } from '@/lib/auth/requireAdmin'
 
 const sql = neon(process.env.DATABASE_URL!)
 
@@ -34,6 +34,8 @@ async function getRecentSubscribers() {
 }
 
 export default async function AdminPage() {
+  await requireAdmin()
+
   const [stats, submissions, subscribers] = await Promise.all([
     getStats(),
     getRecentSubmissions(),
@@ -42,31 +44,9 @@ export default async function AdminPage() {
 
   return (
     <div className="min-h-screen bg-ivory">
-      {/* Header */}
-      <header className="bg-white border-b border-[#E8E0D5] px-6 py-4 flex items-center justify-between">
-        <div>
-          <h1 className="font-serif text-xl text-[#2C2C2A]">Innerloom Admin</h1>
-          <p className="text-xs text-[#9B9590]">Dashboard</p>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="text-xs text-[#4A7C6F] hover:underline"
-          >
-            ← View site
-          </Link>
-          <a
-            href="/api/admin/logout"
-            className="text-xs text-terra hover:underline"
-          >
-            Sign out
-          </a>
-        </div>
-      </header>
+      <AdminNav />
 
       <div className="max-w-5xl mx-auto px-6 py-10 space-y-10">
-
-        {/* Stats */}
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white rounded-2xl border border-[#E8E0D5] p-6">
             <div className="text-3xl font-serif text-[#2C2C2A] mb-1">
@@ -82,7 +62,6 @@ export default async function AdminPage() {
           </div>
         </div>
 
-        {/* Contact submissions */}
         <section>
           <h2 className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase mb-4">
             Recent enquiries
@@ -135,7 +114,6 @@ export default async function AdminPage() {
           </div>
         </section>
 
-        {/* Newsletter subscribers */}
         <section>
           <h2 className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase mb-4">
             Newsletter subscribers
