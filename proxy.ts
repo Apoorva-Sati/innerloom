@@ -3,7 +3,7 @@ import { jwtVerify } from 'jose'
 
 const secret = new TextEncoder().encode(process.env.ADMIN_JWT_SECRET!)
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
 
   const requestHeaders = new Headers(req.headers)
@@ -16,7 +16,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next({ request: { headers: requestHeaders } })
   }
 
-  if (pathname.startsWith('/admin')) {
+  if (pathname.startsWith('/admin') || pathname.startsWith('/studio')) {
     const token = req.cookies.get('admin_token')?.value
 
     if (!token) {
@@ -35,5 +35,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin', '/admin/:path*', '/studio', '/studio/:path*'],
 }
