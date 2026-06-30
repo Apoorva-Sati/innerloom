@@ -30,11 +30,10 @@ const faqs = [
     items: [
       {
         q: 'How long is each session?',
-        a: 'Each session is 50 minutes long. This is the standard therapeutic hour and gives us enough time to go deep without feeling rushed.',
+        a: 'Each session is 45 minutes long. This is the standard therapeutic hour and gives us enough time to go deep without feeling rushed.',
       },
-      {
-        q: 'How often will we meet?',
-        a: 'Most clients begin with weekly sessions, which helps build momentum and continuity. As you progress, we may move to fortnightly sessions. The frequency is always something we decide together based on your needs and circumstances.',
+      { q: 'How often will we meet?', 
+        a: 'Most clients start with weekly sessions to build momentum and establish a strong therapeutic foundation. As we make progress, we can adjust the frequency together based on your goals, needs, and what feels most supportive for you.', 
       },
       {
         q: 'Do you offer online sessions?',

@@ -2,14 +2,14 @@ const creds = [
   { label: "Education",     value: "M.Sc. Applied Psychology — Doon University" },
   { label: "Certification", value: "CBT Practitioner — 120-hour accredited course" },
   // { label: "Experience",    value: "2+ years · 20+ individual clients" },
-  { label: "Modalities",   value: "CBT · ACT · Mindfulness-based techniques" },
+  { label: "Modalities",   value: "CBT · Mindfulness-based techniques" },
   { label: "Languages",    value: "English · Hindi" },
   { label: "Sessions",     value: "Online (pan-India)" },
 ]
 
 export function Credentials() {
   return (
-    <section className="bg-sand `py-18 px-6">
+    <section className="bg-sand py-18 px-6">
       <div className="max-w-180 mx-auto">
         <h2
           className="
