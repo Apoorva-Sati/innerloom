@@ -34,7 +34,7 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <Link href="/contact" className="btn-primary text-sm">
+          <Link href="/book" className="btn-primary text-sm">
             Book a session
           </Link>
         </nav>
@@ -70,7 +70,7 @@ export default function Navbar() {
           >
             WhatsApp us
           </a>
-          <Link href="/contact" className="btn-primary text-sm text-center">
+          <Link href="/book" className="btn-primary text-sm text-center">
             Book a session
           </Link>
         </div>
