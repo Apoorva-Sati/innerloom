@@ -9,7 +9,7 @@ const creds = [
 
 export function Credentials() {
   return (
-    <section className="bg-sand `py-18 px-6">
+    <section className="bg-sand py-18 px-6">
       <div className="max-w-180 mx-auto">
         <h2
           className="

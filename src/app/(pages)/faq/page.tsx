@@ -30,7 +30,7 @@ const faqs = [
     items: [
       {
         q: 'How long is each session?',
-        a: 'Each session is 50 minutes long. This is the standard therapeutic hour and gives us enough time to go deep without feeling rushed.',
+        a: 'Each session is 45 minutes long. This is the standard therapeutic hour and gives us enough time to go deep without feeling rushed.',
       },
       {
         q: 'How often will we meet?',

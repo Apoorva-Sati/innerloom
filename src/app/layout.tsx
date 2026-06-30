@@ -82,7 +82,7 @@ export default function RootLayout({
       <body>
         <JsonLd />
         <ConditionalLayout>{children}</ConditionalLayout>
-        <Toaster />
+        <Toaster position="top-right" />
       </body>
     </html>
   )

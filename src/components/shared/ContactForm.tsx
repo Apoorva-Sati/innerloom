@@ -1,11 +1,20 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { ContactSchema, type ContactFormErrors } from "@/lib/validations/contact"
+import { useState, useRef, useEffect } from "react"
+import { toast } from "sonner"
+import { BookingSchema, type BookingFormErrors } from "@/lib/validations/booking"
+import { SlotPicker } from "@/components/booking/SlotPicker"
+
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Razorpay: new (options: Record<string, any>) => { open(): void }
+  }
+}
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Status = "idle" | "loading" | "success" | "error"
+type Status = "idle" | "loading" | "paying" | "success"
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
@@ -64,12 +73,14 @@ const inputBase: React.CSSProperties = {
   fontSize: "15px",
   color: "#4A3728",
   backgroundColor: "#FFFFFF",
-  border: "1.5px solid #D6C9B8",
+  borderWidth: "1.5px",
+  borderStyle: "solid",
+  borderColor: "#D6C9B8",
   borderRadius: "10px",
   outline: "none",
   transition: "border-color 0.15s",
   boxSizing: "border-box",
-  minHeight: "44px", // WCAG touch target
+  minHeight: "44px",
 }
 
 const inputError: React.CSSProperties = {
@@ -78,71 +89,173 @@ const inputError: React.CSSProperties = {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export function ContactForm() {
+export function ContactForm({
+  sessionType = "free",
+}: {
+  sessionType?: "free" | "paid"
+}) {
   const [status, setStatus] = useState<Status>("idle")
-  const [errors, setErrors] = useState<ContactFormErrors>({})
-  const [serverError, setServerError] = useState<string>("")
+  const [errors, setErrors] = useState<BookingFormErrors>({})
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
+
+  // Load Razorpay checkout.js only on the paid booking form
+  useEffect(() => {
+    if (sessionType !== "paid") return
+    const script   = document.createElement("script")
+    script.src     = "https://checkout.razorpay.com/v1/checkout.js"
+    script.async   = true
+    document.body.appendChild(script)
+    return () => { document.body.removeChild(script) }
+  }, [sessionType])
 
   // ── Submit handler ──────────────────────────────────────────────────────────
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setErrors({})
-    setServerError("")
     setStatus("loading")
 
     const form = e.currentTarget
-    const raw = new FormData(form)
+    const raw  = new FormData(form)
 
-    // Build the payload — checkbox needs special handling
     const payload = {
-      name: raw.get("name") as string,
-      email: raw.get("email") as string,
-      phone: raw.get("phone") as string,
-      session_type: raw.get("session_type") as string,
-      message: raw.get("message") as string,
-      consent: raw.get("consent") === "on" ? true : (false as unknown as true),
-      _honey: raw.get("_honey") as string,
+      name:        raw.get("name") as string,
+      email:       raw.get("email") as string,
+      phone:       raw.get("phone") as string,
+      message:     raw.get("message") as string,
+      sessionType,
+      slotStart:   selectedSlot ?? "",
+      timezone:    Intl.DateTimeFormat().resolvedOptions().timeZone,
+      consent:     raw.get("consent") === "on" ? true : (false as unknown as true),
+      _honey:      raw.get("_honey") as string,
     }
 
     // ── Client-side validation first (instant feedback, no round-trip) ──────
-    const result = ContactSchema.safeParse(payload)
+    const result = BookingSchema.safeParse(payload)
     if (!result.success) {
-      setErrors(result.error.flatten().fieldErrors as ContactFormErrors)
+      setErrors(result.error.flatten().fieldErrors as BookingFormErrors)
       setStatus("idle")
-      // Scroll to first error
       const firstError = form.querySelector("[aria-invalid='true']")
       if (firstError instanceof HTMLElement) firstError.focus()
       return
     }
 
-    // ── Send to API route ──────────────────────────────────────────────────
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
+    // ── Free session flow ────────────────────────────────────────────────────
+    if (sessionType === "free") {
+      try {
+        const res  = await fetch("/api/booking/create", {
+          method:  "POST",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify(payload),
+        })
+        const data = await res.json()
 
+        if (res.ok) {
+          setStatus("success")
+          formRef.current?.reset()
+          setSelectedSlot(null)
+        } else if (res.status === 400 && data.errors) {
+          setErrors(data.errors)
+          setStatus("idle")
+        } else {
+          toast.error(data.error || "Something went wrong. Please try again or WhatsApp us.")
+          setStatus("idle")
+        }
+      } catch {
+        toast.error("Network error. Please check your connection and try again.")
+        setStatus("idle")
+      }
+      return
+    }
+
+    // ── Paid session flow ────────────────────────────────────────────────────
+    // Step 1: create pending booking + Razorpay order
+    let orderData: { bookingId: string; razorpayOrderId: string; amount: number; keyId: string }
+
+    try {
+      const res  = await fetch("/api/booking/paid/start", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(payload),
+      })
       const data = await res.json()
 
-      if (res.ok) {
-        setStatus("success")
-        formRef.current?.reset()
-      } else if (res.status === 400 && data.errors) {
-        // Server returned validation errors (e.g. extra server-side checks)
-        setErrors(data.errors)
-        setStatus("idle")
-      } else {
-        setServerError(
-          data.error || "Something went wrong. Please try again or WhatsApp us."
-        )
-        setStatus("error")
+      if (!res.ok) {
+        if (res.status === 400 && data.errors) {
+          setErrors(data.errors)
+          setStatus("idle")
+        } else {
+          toast.error(data.error || "Something went wrong. Please try again or WhatsApp us.")
+          setStatus("idle")
+        }
+        return
       }
+
+      orderData = data
     } catch {
-      setServerError("Network error. Please check your connection and try again.")
-      setStatus("error")
+      toast.error("Network error. Please check your connection and try again.")
+      setStatus("idle")
+      return
     }
+
+    // Step 2: open Razorpay payment modal
+    setStatus("paying")
+
+    const rzp = new window.Razorpay({
+      key:         orderData.keyId,
+      amount:      orderData.amount,
+      currency:    "INR",
+      name:        "InnerLoom",
+      description: "Counselling Session — 45 min",
+      order_id:    orderData.razorpayOrderId,
+      prefill: {
+        name:  payload.name,
+        email: payload.email,
+        ...(payload.phone ? { contact: payload.phone } : {}),
+      },
+      theme: { color: "#C17B5C" },
+      handler: async (response: {
+        razorpay_order_id:   string
+        razorpay_payment_id: string
+        razorpay_signature:  string
+      }) => {
+        // Step 3: verify payment + create Cal.com event
+        setStatus("loading")
+        try {
+          const verifyRes  = await fetch("/api/payment/verify", {
+            method:  "POST",
+            headers: { "Content-Type": "application/json" },
+            body:    JSON.stringify({
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature,
+              bookingId:           orderData.bookingId,
+            }),
+          })
+          const verifyData = await verifyRes.json()
+
+          if (verifyRes.ok) {
+            setStatus("success")
+            formRef.current?.reset()
+            setSelectedSlot(null)
+          } else {
+            toast.error(verifyData.error || "Payment received but something went wrong. Please contact us.")
+            setStatus("idle")
+          }
+        } catch {
+          toast.error("Payment received but verification failed. Please contact us immediately.")
+          setStatus("idle")
+        }
+      },
+      modal: {
+        ondismiss: () => {
+          // User closed the modal without paying — go back to idle
+          setStatus("idle")
+        },
+      },
+    })
+
+    rzp.open()
   }
 
   // ── Success state ──────────────────────────────────────────────────────────
@@ -169,10 +282,10 @@ export function ContactForm() {
             marginBottom: "12px",
           }}
         >
-          Thank you for reaching out.
+          {sessionType === "paid" ? "Your session is booked." : "Your discovery call is booked."}
         </h2>
         <p style={{ color: "#7A6859", fontSize: "16px", lineHeight: 1.7 }}>
-          I&apos;ve received your message and will be in touch within 24 hours.
+          A confirmation email is on its way to your inbox.
           <br />
           In the meantime, feel free to{" "}
           <a
@@ -183,7 +296,7 @@ export function ContactForm() {
           >
             WhatsApp me
           </a>{" "}
-          if it&apos;s urgent.
+          if you have any questions.
         </p>
         <button
           onClick={() => setStatus("idle")}
@@ -199,13 +312,13 @@ export function ContactForm() {
             cursor: "pointer",
           }}
         >
-          Send another message
+          {sessionType === "paid" ? "Book another session" : "Book another call"}
         </button>
       </div>
     )
   }
 
-  const isLoading = status === "loading"
+  const isLoading = status === "loading" || status === "paying"
 
   // ── Form ───────────────────────────────────────────────────────────────────
   return (
@@ -232,23 +345,6 @@ export function ContactForm() {
           pointerEvents: "none",
         }}
       />
-
-      {/* ── Server-level error banner ── */}
-      {serverError && (
-        <div
-          role="alert"
-          style={{
-            background: "#FEF2F2",
-            border: "1.5px solid #FECACA",
-            borderRadius: "10px",
-            padding: "12px 16px",
-            fontSize: "14px",
-            color: "#B91C1C",
-          }}
-        >
-          {serverError}
-        </div>
-      )}
 
       {/* ── Row 1: Name ── */}
       <div>
@@ -381,7 +477,33 @@ export function ContactForm() {
         </span>
       </div>
 
-      {/* ── Row 5: Consent checkbox ── */}
+      {/* ── Row 5: Pick a time ── */}
+      <div>
+        <Label htmlFor="slotStart" required>
+          {sessionType === "paid" ? "Pick a time for your session" : "Pick a time for your free discovery call"}
+        </Label>
+        <div
+          style={{
+            border: "1.5px solid #D6C9B8",
+            borderRadius: "12px",
+            background: "#F7F2EB",
+            overflow: "hidden",
+            marginTop: "6px",
+          }}
+        >
+          <SlotPicker
+            sessionType={sessionType}
+            selectedSlot={selectedSlot}
+            onSelect={setSelectedSlot}
+            disabled={isLoading}
+          />
+        </div>
+        <span id="slotStart-error">
+          <FieldError messages={errors.slotStart} />
+        </span>
+      </div>
+
+      {/* ── Row 6: Consent checkbox ── */}
       <div>
         <label
           style={{
@@ -444,13 +566,20 @@ export function ContactForm() {
     }
   `}
 >
-  {isLoading ? (
+  {status === "paying" ? (
     <>
       <Spinner />
-      Sending...
+      Complete payment in the window above…
     </>
+  ) : isLoading ? (
+    <>
+      <Spinner />
+      {sessionType === "paid" ? "Booking your session..." : "Booking your call..."}
+    </>
+  ) : sessionType === "paid" ? (
+    "Confirm & pay ₹400"
   ) : (
-    "Send message"
+    "Confirm booking"
   )}
 </button>
 

@@ -17,7 +17,7 @@ async function getStats() {
 
 async function getRecentSubmissions() {
   return sql`
-    SELECT id, name, email, message, phone, created_at
+    SELECT id, name, email, phone, created_at
     FROM contact_inquiries
     ORDER BY created_at DESC
     LIMIT 10
