@@ -10,22 +10,22 @@ export const metadata: Metadata = {
 
 const principles = [
   {
-    title: 'You are the expert on your own life',
-    body: 'My role is not to tell you what to do or how to feel. I bring training, tools, and a structured approach — but you bring the lived experience, the context, and the wisdom. Good therapy is a collaboration.',
+    title: "You are the expert of your own life",
+    body: "I don't believe I have all the answers to your problems, but you do. My role isn't to tell you what to do or make decisions for you. Instead, I'm here to help you understand yourself more deeply, explore different perspectives, and find the path that feels right for you.",
   },
   {
-    title: 'Warmth before technique',
-    body: 'The most important ingredient in therapy is the relationship between therapist and client. Before any technique or framework, I prioritise creating a space where you feel genuinely heard, safe, and unjudged.',
+    title: "Warmth before technique",
+    body: "While psychological approaches and therapeutic frameworks are important, I believe that genuine human connection comes first. Before any technique, I prioritize creating a space where you feel safe, accepted, and free to be yourself. I want you to feel heard without the fear of being judged, and supported without the pressure to be anything other than who you are.",
   },
   {
-    title: 'Evidence-based and human',
-    body: "I draw on approaches that have strong research backing — particularly CBT — but I never apply them mechanically. Every person is different, and the work we do together will be tailored to you, not to a checklist.",
+    title: "A space to move at your own pace",
+    body: "Healing doesn't follow a timeline, and neither should therapy. Some sessions may feel like breakthroughs, while others may simply be about sitting with difficult emotions. Both are equally valuable. Whether you move slowly or quickly, we'll honour your pace because meaningful change happens when you feel ready—not rushed.",
   },
   {
-    title: 'Progress, not perfection',
-    body: "Therapy isn't about becoming a different person. It's about understanding yourself better, loosening the grip of patterns that no longer serve you, and building a life that feels more like your own.",
+    title: "Progress over perfection",
+    body: "I don't measure therapy by how quickly problems disappear. I believe growth is often found in the small, meaningful shifts—increased self-awareness, healthier boundaries, a little more self-compassion, or feeling slightly lighter than before. Therapy isn't about achieving perfection; it's about making progress, one step at a time, in a way that feels sustainable and true to you.",
   },
-]
+];
 
 const approaches = [
   {
@@ -107,7 +107,7 @@ export default function ApproachPage() {
         <section>
           <div className="flex items-center gap-3 mb-8">
             <div className="w-2 h-2 rounded-full bg-[#4A7C6F]" />
-            <h2 className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase">
+            <h2 className="text-xs font-bold tracking-widest text-[#4A7C6F] uppercase">
               My philosophy
             </h2>
           </div>
@@ -130,7 +130,7 @@ export default function ApproachPage() {
         <section>
           <div className="flex items-center gap-3 mb-8">
             <div className="w-2 h-2 rounded-full bg-[#4A7C6F]" />
-            <h2 className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase">
+            <h2 className="text-xs font-bold tracking-widest text-[#4A7C6F] uppercase">
               Methods I draw on
             </h2>
           </div>
@@ -168,7 +168,7 @@ export default function ApproachPage() {
         <section>
           <div className="flex items-center gap-3 mb-8">
             <div className="w-2 h-2 rounded-full bg-[#4A7C6F]" />
-            <h2 className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase">
+            <h2 className="text-xs font-bold tracking-widest text-[#4A7C6F] uppercase">
               What working together looks like
             </h2>
           </div>
@@ -194,7 +194,7 @@ export default function ApproachPage() {
         <section className="bg-[#EEF4F0] rounded-2xl p-8 border border-[#C8DDD0]">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-2 h-2 rounded-full bg-[#4A7C6F]" />
-            <h2 className="text-xs font-medium tracking-widest text-[#4A7C6F] uppercase">
+            <h2 className="text-xs font-bold tracking-widest text-[#4A7C6F] uppercase">
               Who I work best with
             </h2>
           </div>

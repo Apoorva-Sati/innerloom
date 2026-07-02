@@ -2,6 +2,7 @@ import { AboutMe } from "@/components/about/AboutMe"
 import { Credentials } from "@/components/about/Credentials"
 import { MyApproach } from "@/components/about/MyApproach"
 import { Vignettes } from "@/components/about/Vignettes"
+import { FadeIn } from "@/components/shared/FadeIn"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -13,11 +14,22 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <>
-      <AboutMe />
-      <MyApproach />
-      <Credentials />
-      {/* <Vignettes /> */}
-    </>
+<>
+  <FadeIn direction="up">
+    <AboutMe />
+  </FadeIn>
+
+  <FadeIn direction="up">
+    <MyApproach />
+  </FadeIn>
+
+  <FadeIn direction="up">
+    <Credentials />
+  </FadeIn>
+
+  {/* <FadeIn direction="up">
+    <Vignettes />
+  </FadeIn> */}
+</>
   )
 }

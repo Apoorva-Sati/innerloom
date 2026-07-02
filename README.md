@@ -15,7 +15,7 @@ Professional website for **Parishkriti Bamrara**, Counselling Psychologist — o
 | Validation | Zod |
 | Hosting | Vercel |
 | CDN / DNS | Cloudflare |
-| Analytics | Plausible (post-launch) |
+<!-- | Analytics | Plausible (post-launch) | -->
 
 ---
 

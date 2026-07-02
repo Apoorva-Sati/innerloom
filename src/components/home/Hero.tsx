@@ -33,16 +33,16 @@ export function Hero() {
           </div>
         </div>
 
-        <div>
-          <Image
-            src="/images/hero-photo.jpg"
-            alt="Parishkriti Bamrara, Counselling Psychologist"
-            width={500}
-            height={600}
-            priority
-            className="h-auto w-full rounded-(--radius-xl)"
-          />
-        </div>
+        <div className="flex justify-center md:justify-end">
+  <Image
+    src="/images/picture.png"
+    alt="Parishkriti Bamrara, Counselling Psychologist"
+    width={380}
+    height={380}
+    priority
+    className="w-full max-w-95 rounded-(--radius-xl)"
+  />
+</div>
       </div>
     </section>
   );
