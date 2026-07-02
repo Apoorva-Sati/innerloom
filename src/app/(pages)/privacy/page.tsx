@@ -49,13 +49,13 @@ export default function PrivacyPage() {
         <li>Your phone number (optional)</li>
         <li>The message you write to us</li>
       </ul>
-      <p>
+      {/* <p>
         We also automatically collect standard web analytics data through{" "}
         <strong>Plausible Analytics</strong> — a privacy-focused, cookie-free
         analytics tool. This includes approximate country, browser type, and
         pages visited. It does not track individuals and collects no personal
         identifiers.
-      </p>
+      </p> */}
       <p>
         We do <strong>not</strong> use cookies, tracking pixels, or any
         third-party advertising or analytics scripts.
@@ -151,13 +151,13 @@ export default function PrivacyPage() {
         <li>
           <strong>Cloudflare</strong> — DNS and content delivery
         </li>
-        <li>
+        {/* <li>
           <strong>Plausible Analytics</strong> — privacy-first, cookie-free
           analytics
-        </li>
+        </li> */}
       </ul>
       <p>
-        Video sessions are conducted via <strong> Google Meet / Zoom</strong>.
+        Video sessions are conducted via <strong> Google Meet</strong>.
         Please review that platform&rsquo;s own privacy policy for information on
         how your video data is handled.
       </p>
