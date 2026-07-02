@@ -125,7 +125,7 @@ export default function TermsPage() {
         prior arrangement has been made in writing.
       </p>
       <p>
-        We currently accept payment via <strong>[UPI / bank transfer / Razorpay — fill in]</strong>.
+        We currently accept payment via <strong>[UPI]</strong>.
         Receipts are provided on request.
       </p>
       <p>
@@ -144,7 +144,7 @@ export default function TermsPage() {
 
       <h2>8. Online sessions</h2>
       <p>
-        Online sessions are conducted via <strong>Google Meet / Zoom</strong>.
+        Online sessions are conducted via <strong>Google Meet</strong>.
         You are responsible for ensuring you have a stable internet connection and a
         private, confidential space from which to attend.
       </p>

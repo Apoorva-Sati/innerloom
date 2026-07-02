@@ -8,13 +8,30 @@ import { FadeIn } from "@/components/shared/FadeIn";
 
 export default function HomePage() {
   return (
-    <>
-      <Hero />
-      <WhoIHelp />
-      <HowItWorks />
-      <AboutSnippet />
-      <TrustBar />
-      <HomeCTA />
-    </>
+<>
+  <FadeIn direction="up">
+    <Hero />
+  </FadeIn>
+
+  <FadeIn direction="up">
+    <WhoIHelp />
+  </FadeIn>
+
+  <FadeIn direction="up">
+    <HowItWorks />
+  </FadeIn>
+
+  <FadeIn direction="up">
+    <AboutSnippet />
+  </FadeIn>
+
+  <FadeIn direction="up">
+    <TrustBar />
+  </FadeIn>
+
+  <FadeIn direction="up">
+    <HomeCTA />
+  </FadeIn>
+</>
   )
 }

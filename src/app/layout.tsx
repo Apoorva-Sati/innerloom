@@ -34,9 +34,9 @@ export const metadata: Metadata = {
       "students across India. Book a free 15-minute discovery call today.",
     images: [
       {
-url: `${BASE_URL}/images/hero-photo.jpg`,
+      url: `${BASE_URL}/images/picture.png`,
         width: 1200,
-        height: 630,
+        height: 530,
         alt: "Innerloom — Counselling by Parishkriti Bamrara",
       },
     ],
@@ -49,7 +49,7 @@ url: `${BASE_URL}/images/hero-photo.jpg`,
     description:
       "Warm, CBT-based online counselling for young adults, professionals & " +
       "students across India.",
-    images: [`${BASE_URL}/images/hero-photo.jpg`],
+    images: [`${BASE_URL}/images/picture.png`],
   },
 
   // ── Indexing ───────────────────────────────────────────────────────────
