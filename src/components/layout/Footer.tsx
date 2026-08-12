@@ -7,7 +7,7 @@ const navLinks = [
 ];
 
 const legalLinks = [
-  { href: "/privacy", label: "Privacy policy" },
+  { href: "/privacy-policy", label: "Privacy policy" },
   { href: "/terms", label: "Terms of use" },
 ];
 
