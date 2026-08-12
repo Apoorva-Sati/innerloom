@@ -17,6 +17,12 @@ export const ContactSchema = z.object({
     .optional()
     .or(z.literal("")),
 
+  age: z.coerce
+      .number({ error: "Please enter your age" })
+      .int("Age must be a whole number")
+      .min(14, "You must be at least 14 years old to submit this form")
+      .max(120, "Please enter a valid age"),
+
   message: z
     .string()
     .min(10, "Please share a bit more (at least 10 characters)")

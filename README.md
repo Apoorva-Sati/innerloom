@@ -27,7 +27,7 @@ src/
 │   ├── (pages)/
 │   │   ├── about/          → /about
 │   │   ├── contact/        → /contact
-│   │   ├── privacy/        → /privacy-policy
+│   │   ├── privacy-policy/ → /privacy-policy
 │   │   └── terms/          → /terms
 │   ├── api/
 │   │   └── contact/        → POST /api/contact

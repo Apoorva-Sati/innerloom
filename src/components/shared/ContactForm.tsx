@@ -7,6 +7,11 @@ import { ContactSchema, type ContactFormErrors } from "@/lib/validations/contact
 
 type Status = "idle" | "loading" | "success" | "error"
 
+// ─── Age thresholds ────────────────────────────────────────────────────────────
+
+const BLOCKED_MAX_AGE = 13 // 13 and under → cannot book at all
+const CONSENT_MAX_AGE = 18 // 14–18 → needs parent/guardian consent
+
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
 function FieldError({ messages }: { messages?: string[] }) {
@@ -64,7 +69,9 @@ const inputBase: React.CSSProperties = {
   fontSize: "15px",
   color: "#4A3728",
   backgroundColor: "#FFFFFF",
-  border: "1.5px solid #D6C9B8",
+  borderWidth: "1.5px",
+  borderStyle: "solid",
+  borderColor: "#D6C9B8",
   borderRadius: "10px",
   outline: "none",
   transition: "border-color 0.15s",
@@ -82,13 +89,31 @@ export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle")
   const [errors, setErrors] = useState<ContactFormErrors>({})
   const [serverError, setServerError] = useState<string>("")
+  const [age, setAge] = useState<string>("")
   const formRef = useRef<HTMLFormElement>(null)
+
+  // ── Age checks ──────────────────────────────────────────────────────────────
+  const parsedAge = age === "" ? null : Number(age)
+  const isBlocked =
+    parsedAge !== null && !Number.isNaN(parsedAge) && parsedAge <= BLOCKED_MAX_AGE
+  const needsConsent =
+    parsedAge !== null &&
+    !Number.isNaN(parsedAge) &&
+    parsedAge > BLOCKED_MAX_AGE &&
+    parsedAge <= CONSENT_MAX_AGE
 
   // ── Submit handler ──────────────────────────────────────────────────────────
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setErrors({})
     setServerError("")
+
+    // Hard stop — 13 and under cannot submit, no matter what
+    if (isBlocked) {
+      alert("Sorry, you cannot book a session. You must be at least 14 years old.")
+      return
+    }
+
     setStatus("loading")
 
     const form = e.currentTarget
@@ -99,7 +124,7 @@ export function ContactForm() {
       name: raw.get("name") as string,
       email: raw.get("email") as string,
       phone: raw.get("phone") as string,
-      session_type: raw.get("session_type") as string,
+      age: raw.get("age") as string,
       message: raw.get("message") as string,
       consent: raw.get("consent") === "on" ? true : (false as unknown as true),
       _honey: raw.get("_honey") as string,
@@ -129,6 +154,7 @@ export function ContactForm() {
       if (res.ok) {
         setStatus("success")
         formRef.current?.reset()
+        setAge("")
       } else if (res.status === 400 && data.errors) {
         // Server returned validation errors (e.g. extra server-side checks)
         setErrors(data.errors)
@@ -343,7 +369,69 @@ export function ContactForm() {
           <FieldError messages={errors.phone} />
         </span>
       </div>
-      {/* ── Row 4: Message ── */}
+
+      {/* ── Row 4: Age ── */}
+      <div>
+        <Label htmlFor="age" required>
+          Your age
+        </Label>
+        <input
+          id="age"
+          name="age"
+          type="number"
+          min={1}
+          max={120}
+          inputMode="numeric"
+          placeholder="e.g. 24"
+          value={age}
+          disabled={isLoading}
+          aria-invalid={!!errors.age || isBlocked}
+          aria-describedby="age-error"
+          onChange={(e) => setAge(e.target.value)}
+          style={{
+            ...inputBase,
+            ...((errors.age || isBlocked) ? inputError : {}),
+            opacity: isLoading ? 0.6 : 1,
+          }}
+          onFocus={(e) => {
+            if (!errors.age && !isBlocked) e.target.style.borderColor = "#3D6B6E"
+          }}
+          onBlur={(e) => {
+            if (!errors.age && !isBlocked) e.target.style.borderColor = "#D6C9B8"
+          }}
+        />
+        <span id="age-error">
+          {isBlocked ? (
+            <p
+              role="alert"
+              style={{
+                color: "#C0392B",
+                fontSize: "12px",
+                marginTop: "4px",
+                lineHeight: 1.4,
+              }}
+            >
+              Sorry, you cannot book a session. You must be at least 14 years old.
+            </p>
+          ) : needsConsent ? (
+            <p
+              style={{
+                color: "#7A6859",
+                fontSize: "12px",
+                marginTop: "4px",
+                lineHeight: 1.4,
+              }}
+            >
+              You&apos;ll need consent from a parent or guardian before we can begin
+              sessions together.
+            </p>
+          ) : (
+            <FieldError messages={errors.age} />
+          )}
+        </span>
+      </div>
+
+      {/* ── Row 5: Message ── */}
       <div>
         <Label htmlFor="message" required>
           What brings you here?
@@ -381,7 +469,7 @@ export function ContactForm() {
         </span>
       </div>
 
-      {/* ── Row 5: Consent checkbox ── */}
+      {/* ── Row 6: Consent checkbox ── */}
       <div>
         <label
           style={{
@@ -427,32 +515,32 @@ export function ContactForm() {
 
       {/* ── Submit button ── */}
       <button
-  type="submit"
-  disabled={isLoading}
-  aria-busy={isLoading}
-  className={`
-    w-full min-h-13
-    flex items-center justify-center gap-2.5
-    rounded-xl
-    px-6 py-3.5
-    text-base font-medium text-white
-    transition-colors
-    ${
-      isLoading
-        ? "bg-terra-dark cursor-not-allowed"
-        : "bg-terra hover:bg-terra-dark cursor-pointer"
-    }
-  `}
->
-  {isLoading ? (
-    <>
-      <Spinner />
-      Sending...
-    </>
-  ) : (
-    "Send message"
-  )}
-</button>
+        type="submit"
+        disabled={isLoading || isBlocked}
+        aria-busy={isLoading}
+        className={`
+          w-full min-h-13
+          flex items-center justify-center gap-2.5
+          rounded-xl
+          px-6 py-3.5
+          text-base font-medium text-white
+          transition-colors
+          ${
+            isLoading || isBlocked
+              ? "bg-terra-dark cursor-not-allowed opacity-60"
+              : "bg-terra hover:bg-terra-dark cursor-pointer"
+          }
+        `}
+      >
+        {isLoading ? (
+          <>
+            <Spinner />
+            Sending...
+          </>
+        ) : (
+          "Send message"
+        )}
+      </button>
 
       {/* ── Crisis note ── */}
       <p
