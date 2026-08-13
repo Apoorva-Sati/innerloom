@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
+      age: formData.age,
       message: formData.message,
     })
 
