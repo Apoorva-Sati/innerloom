@@ -14,8 +14,12 @@ declare global {
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Status = "idle" | "loading" | "paying" | "success"
+type Status = "idle" | "loading" | "success" | "error"
 
+// ─── Age thresholds ────────────────────────────────────────────────────────────
+
+const BLOCKED_MAX_AGE = 13 // 13 and under → cannot book at all
+const CONSENT_MAX_AGE = 18 // 14–18 → needs parent/guardian consent
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
 function FieldError({ messages }: { messages?: string[] }) {
@@ -97,6 +101,7 @@ export function ContactForm({
   const [status, setStatus] = useState<Status>("idle")
   const [errors, setErrors] = useState<BookingFormErrors>({})
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null)
+  const [age, setAge] = useState<string>("")
   const formRef = useRef<HTMLFormElement>(null)
 
   // Load Razorpay checkout.js only on the paid booking form
@@ -109,10 +114,37 @@ export function ContactForm({
     return () => { document.body.removeChild(script) }
   }, [sessionType])
 
+  // Load Razorpay checkout.js only on the paid booking form
+  useEffect(() => {
+    if (sessionType !== "paid") return
+    const script   = document.createElement("script")
+    script.src     = "https://checkout.razorpay.com/v1/checkout.js"
+    script.async   = true
+    document.body.appendChild(script)
+    return () => { document.body.removeChild(script) }
+  }, [sessionType])
+
+  // ── Age checks ──────────────────────────────────────────────────────────────
+  const parsedAge = age === "" ? null : Number(age)
+  const isBlocked =
+    parsedAge !== null && !Number.isNaN(parsedAge) && parsedAge <= BLOCKED_MAX_AGE
+  const needsConsent =
+    parsedAge !== null &&
+    !Number.isNaN(parsedAge) &&
+    parsedAge > BLOCKED_MAX_AGE &&
+    parsedAge <= CONSENT_MAX_AGE
+
   // ── Submit handler ──────────────────────────────────────────────────────────
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setErrors({})
+
+    // Hard stop — 13 and under cannot submit, no matter what
+    if (isBlocked) {
+      alert("Sorry, you cannot book a session. You must be at least 14 years old.")
+      return
+    }
+
     setStatus("loading")
 
     const form = e.currentTarget
@@ -122,6 +154,7 @@ export function ContactForm({
       name:        raw.get("name") as string,
       email:       raw.get("email") as string,
       phone:       raw.get("phone") as string,
+      age: raw.get("age") as string,
       message:     raw.get("message") as string,
       sessionType,
       slotStart:   selectedSlot ?? "",
@@ -154,7 +187,8 @@ export function ContactForm({
           setStatus("success")
           formRef.current?.reset()
           setSelectedSlot(null)
-        } else if (res.status === 400 && data.errors) {
+          setAge("")
+      } else if (res.status === 400 && data.errors) {
           setErrors(data.errors)
           setStatus("idle")
         } else {
@@ -439,7 +473,69 @@ export function ContactForm({
           <FieldError messages={errors.phone} />
         </span>
       </div>
-      {/* ── Row 4: Message ── */}
+
+      {/* ── Row 4: Age ── */}
+      <div>
+        <Label htmlFor="age" required>
+          Your age
+        </Label>
+        <input
+          id="age"
+          name="age"
+          type="number"
+          min={1}
+          max={120}
+          inputMode="numeric"
+          placeholder="e.g. 24"
+          value={age}
+          disabled={isLoading}
+          aria-invalid={!!errors.age || isBlocked}
+          aria-describedby="age-error"
+          onChange={(e) => setAge(e.target.value)}
+          style={{
+            ...inputBase,
+            ...((errors.age || isBlocked) ? inputError : {}),
+            opacity: isLoading ? 0.6 : 1,
+          }}
+          onFocus={(e) => {
+            if (!errors.age && !isBlocked) e.target.style.borderColor = "#3D6B6E"
+          }}
+          onBlur={(e) => {
+            if (!errors.age && !isBlocked) e.target.style.borderColor = "#D6C9B8"
+          }}
+        />
+        <span id="age-error">
+          {isBlocked ? (
+            <p
+              role="alert"
+              style={{
+                color: "#C0392B",
+                fontSize: "12px",
+                marginTop: "4px",
+                lineHeight: 1.4,
+              }}
+            >
+              Sorry, you cannot book a session. You must be at least 14 years old.
+            </p>
+          ) : needsConsent ? (
+            <p
+              style={{
+                color: "#7A6859",
+                fontSize: "12px",
+                marginTop: "4px",
+                lineHeight: 1.4,
+              }}
+            >
+              You&apos;ll need consent from a parent or guardian before we can begin
+              sessions together.
+            </p>
+          ) : (
+            <FieldError messages={errors.age} />
+          )}
+        </span>
+      </div>
+
+      {/* ── Row 5: Message ── */}
       <div>
         <Label htmlFor="message" required>
           What brings you here?
@@ -477,7 +573,7 @@ export function ContactForm({
         </span>
       </div>
 
-      {/* ── Row 5: Pick a time ── */}
+      {/* ── Row 6: Pick a time ── */}
       <div>
         <Label htmlFor="slotStart" required>
           {sessionType === "paid" ? "Pick a time for your session" : "Pick a time for your free discovery call"}
@@ -533,7 +629,7 @@ export function ContactForm({
             therapist–client relationship. My details will be kept confidential
             and used only to respond to this enquiry. Read the{" "}
             <a
-              href="/privacy-policy"
+              href="/privacy"
               style={{ color: "#3D6B6E", textDecoration: "underline" }}
               target="_blank"
             >
@@ -549,39 +645,39 @@ export function ContactForm({
 
       {/* ── Submit button ── */}
       <button
-  type="submit"
-  disabled={isLoading}
-  aria-busy={isLoading}
-  className={`
-    w-full min-h-13
-    flex items-center justify-center gap-2.5
-    rounded-xl
-    px-6 py-3.5
-    text-base font-medium text-white
-    transition-colors
-    ${
-      isLoading
-        ? "bg-terra-dark cursor-not-allowed"
-        : "bg-terra hover:bg-terra-dark cursor-pointer"
-    }
-  `}
->
-  {status === "paying" ? (
+        type="submit"
+        disabled={isLoading || isBlocked}
+        aria-busy={isLoading}
+        className={`
+          w-full min-h-13
+          flex items-center justify-center gap-2.5
+          rounded-xl
+          px-6 py-3.5
+          text-base font-medium text-white
+          transition-colors
+          ${
+            isLoading || isBlocked
+              ? "bg-terra-dark cursor-not-allowed opacity-60"
+              : "bg-terra hover:bg-terra-dark cursor-pointer"
+          }
+        `}
+      >
+        {status === "paying" ? (
     <>
       <Spinner />
       Complete payment in the window above…
     </>
   ) : isLoading ? (
-    <>
-      <Spinner />
-      {sessionType === "paid" ? "Booking your session..." : "Booking your call..."}
-    </>
+          <>
+            <Spinner />
+            {sessionType === "paid" ? "Booking your session..." : "Booking your call..."}
+          </>
   ) : sessionType === "paid" ? (
     "Confirm & pay ₹400"
-  ) : (
-    "Confirm booking"
-  )}
-</button>
+        ) : (
+          "Confirm booking"
+        )}
+      </button>
 
       {/* ── Crisis note ── */}
       <p

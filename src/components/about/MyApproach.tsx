@@ -50,7 +50,7 @@ export function MyApproach() {
             >
               <div className="shrink-0 text-[28px]">{p.icon}</div>
               <div>
-                <h3 className="mb-2  text-base font-medium text-teal">
+                <h3 className="mb-2  text-xl font-medium text-teal">
                   {p.title}
                 </h3>
                 <p className="text-sm leading-[1.7] text-brown-mid">

@@ -41,7 +41,7 @@ export function NewsletterSignup({ source }: { source?: string }) {
   }
 
   return (
-    <div className="bg-[#EDE5D8] rounded-2xl p-8">
+    <div className="bg-sand rounded-2xl p-8">
       <h3 className="font-serif text-xl text-[#2C2C2A] mb-2">
         Stay in the loop
       </h3>
@@ -66,26 +66,26 @@ export function NewsletterSignup({ source }: { source?: string }) {
           placeholder="Your name (optional)"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border border-[#E8D5C4] bg-white text-[#2C2C2A] text-sm placeholder:text-[#C4BDB6] focus:outline-none focus:border-[#4A7C6F]"
+          className="w-full px-4 py-3 rounded-xl border border-peach bg-white text-[#2C2C2A] text-sm placeholder:text-[#C4BDB6] focus:outline-none focus:border-[#4A7C6F]"
         />
         <input
           type="email"
           placeholder="Your email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border border-[#E8D5C4] bg-white text-[#2C2C2A] text-sm placeholder:text-[#C4BDB6] focus:outline-none focus:border-[#4A7C6F]"
+          className="w-full px-4 py-3 rounded-xl border border-peach bg-white text-[#2C2C2A] text-sm placeholder:text-[#C4BDB6] focus:outline-none focus:border-[#4A7C6F]"
         />
         <button
           onClick={handleSubmit}
           disabled={status === 'loading' || !email}
-          className="w-full py-3 rounded-xl bg-[#C17B5C] text-white text-sm font-medium hover:bg-[#A5644A] transition-colors disabled:opacity-50"
+          className="w-full py-3 rounded-xl bg-terra text-white text-sm font-medium hover:bg-terra-dark transition-colors disabled:opacity-50"
         >
           {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
         </button>
       </div>
 
       {status === 'error' && (
-        <p className="text-xs text-[#C17B5C] mt-3">
+        <p className="text-xs text-terra mt-3">
           Something went wrong. Please try again.
         </p>
       )}
