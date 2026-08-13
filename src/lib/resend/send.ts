@@ -6,6 +6,7 @@ interface ContactData {
   name: string
   email: string
   phone?: string
+  age?: number
   message: string
 }
 
@@ -81,6 +82,7 @@ function buildEmailHtml(data: ContactData): string {
             <td style="padding:24px 32px">
               <table width="100%" cellpadding="0" cellspacing="0"
                 style="font-size:14px;color:#4A3728">
+
                 <tr>
                   <td style="padding:8px 0;border-bottom:1px solid #EDE5D8;
                     color:#7A6859;width:140px">Email</td>
@@ -91,14 +93,25 @@ function buildEmailHtml(data: ContactData): string {
                     </a>
                   </td>
                 </tr>
+
+                ${data.age ? `
+                <tr>
+                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8;
+                    color:#7A6859">Age</td>
+                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8">
+                    ${escapeHtml(String(data.age))}
+                  </td>
+                </tr>` : ""}
+
                 ${data.phone ? `
-<tr>
-  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8;
-    color:#7A6859">Phone</td>
-  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8">
-    ${escapeHtml(data.phone)}
-  </td>
-</tr>` : ""}
+                <tr>
+                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8;
+                    color:#7A6859">Phone</td>
+                  <td style="padding:8px 0;border-bottom:1px solid #EDE5D8">
+                    ${escapeHtml(data.phone)}
+                  </td>
+                </tr>` : ""}
+
               </table>
             </td>
           </tr>
