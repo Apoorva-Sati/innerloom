@@ -137,7 +137,7 @@ export default function TermsPage() {
       <h2>7. Confidentiality</h2>
       <p>
         All information shared in sessions is confidential. Please refer to our{" "}
-        <a href="/privacy-policy">Privacy Policy</a> for full details on how your information
+        <a href="/privacy">Privacy Policy</a> for full details on how your information
         is collected, stored, and protected, and the limited circumstances in which
         confidentiality may need to be broken.
       </p>
@@ -224,7 +224,7 @@ export default function TermsPage() {
       <p className="text-[13px] text-[#9A8A7A]">
         By submitting an enquiry or booking a session, you confirm that you have
         read, understood, and agreed to these Terms of Use and our{" "}
-        <a href="/privacy-policy">Privacy Policy</a>.
+        <a href="/privacy">Privacy Policy</a>.
       </p>
     </LegalLayout>
   )

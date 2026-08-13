@@ -499,7 +499,7 @@ export function ContactForm() {
             therapist–client relationship. My details will be kept confidential
             and used only to respond to this enquiry. Read the{" "}
             <a
-              href="/privacy-policy"
+              href="/privacy"
               style={{ color: "#3D6B6E", textDecoration: "underline" }}
               target="_blank"
             >

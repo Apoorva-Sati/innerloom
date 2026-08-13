@@ -92,7 +92,7 @@ export function NewsletterSignup({ source }: { source?: string }) {
 
       <p className="text-xs text-[#9B9590] mt-4">
         By subscribing you agree to our{' '}
-        <a href="/privacy-policy" className="underline">Privacy Policy</a>.
+        <a href="/privacy" className="underline">Privacy Policy</a>.
         Unsubscribe anytime by replying to any email.
       </p>
     </div>
