@@ -25,7 +25,7 @@ export function LegalLayout({
 
         <h1
           className="mb-3 text-[clamp(30px,4vw,44px)] font-light leading-[1.2] text-teal"
-          style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+          style={{ fontFamily: "var(--font-display)" }}
         >
           {title}
         </h1>

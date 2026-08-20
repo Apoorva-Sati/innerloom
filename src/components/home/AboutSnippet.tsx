@@ -19,6 +19,8 @@ export default function AboutSnippet() {
             alt="Parishkriti, Counselling Psychologist"
             width={420}
             height={500}
+            loading="lazy"
+            sizes="(max-width: 768px) 90vw, 420px"
             className=" h-auto w-full rounded-(--radius-xl)"
           />
         </div>

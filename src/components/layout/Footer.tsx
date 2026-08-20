@@ -25,7 +25,7 @@ export default function Footer() {
             <Link
               href="/"
               className="mb-2.5 block text-[22px] font-normal tracking-[0.01em] text-white no-underline"
-              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+              style={{ fontFamily: "var(--font-display)" }}
             >
               Innerloom
             </Link>

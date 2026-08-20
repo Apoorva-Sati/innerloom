@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 
 interface FadeInProps {
   children: React.ReactNode
@@ -9,38 +9,70 @@ interface FadeInProps {
   className?: string
 }
 
+const directionStyles: Record<NonNullable<FadeInProps['direction']>, string> = {
+  up:    'translate-y-6',
+  down:  '-translate-y-6',
+  left:  'translate-x-6',
+  right: '-translate-x-6',
+  none:  '',
+}
+
+/**
+ * Lightweight fade-in using IntersectionObserver + CSS transitions.
+ * Replaces framer-motion to eliminate the ~75 KB bundle cost.
+ * Respects prefers-reduced-motion via CSS media query.
+ */
 export function FadeIn({
   children,
   delay = 0,
   direction = 'up',
   className,
 }: FadeInProps) {
-  const directionMap = {
-    up:    { y: 24, x: 0 },
-    down:  { y: -24, x: 0 },
-    left:  { y: 0, x: 24 },
-    right: { y: 0, x: -24 },
-    none:  { y: 0, x: 0 },
-  }
+  const ref = useRef<HTMLDivElement>(null)
 
-  const initial = {
-    opacity: 0,
-    ...directionMap[direction],
-  }
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    // Skip animation entirely when user prefers reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.style.opacity = '1'
+      el.style.transform = 'none'
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.dataset.visible = 'true'
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.05, rootMargin: '-50px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  const translateClass = directionStyles[direction]
+  const delayStyle = delay ? { transitionDelay: `${delay}s` } : undefined
 
   return (
-    <motion.div
-      initial={initial}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{
-        duration: 0.6,
-        delay,
-        ease: [0.21, 0.47, 0.32, 0.98],
-      }}
-      className={className}
+    <div
+      ref={ref}
+      className={[
+        'transition-[opacity,transform] duration-600 ease-out',
+        'opacity-0',
+        translateClass,
+        'motion-reduce:opacity-100 motion-reduce:translate-x-0 motion-reduce:translate-y-0',
+        'data-[visible=true]:opacity-100 data-[visible=true]:translate-x-0 data-[visible=true]:translate-y-0',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      style={delayStyle}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }

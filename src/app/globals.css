@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@400;500&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -17,8 +16,9 @@
   --color-brown-mid:  #7A6859;
   --color-crisis:     #D94F38;
 
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'DM Sans', system-ui, sans-serif;
+  /* Font families are injected as CSS variables by next/font in layout.tsx */
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-body:    var(--font-dm-sans), system-ui, sans-serif;
 
   --radius-sm: 4px;
   --radius-md: 8px;

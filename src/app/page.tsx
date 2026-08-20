@@ -9,13 +9,11 @@ import { FadeIn } from "@/components/shared/FadeIn";
 export default function HomePage() {
   return (
 <>
-  <FadeIn direction="up">
-    <Hero />
-  </FadeIn>
+  {/* Hero is NOT wrapped in FadeIn — it's the LCP element.
+      Starting it at opacity:0 delays LCP until JS hydrates. */}
+  <Hero />
 
-  <FadeIn direction="up">
-    <WhoIHelp />
-  </FadeIn>
+  <WhoIHelp />
 
   <FadeIn direction="up">
     <HowItWorks />
@@ -34,4 +32,4 @@ export default function HomePage() {
   </FadeIn>
 </>
   )
-}
+}

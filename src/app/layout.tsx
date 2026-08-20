@@ -1,8 +1,25 @@
 import type { Metadata } from "next"
+import { Cormorant_Garamond, DM_Sans } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { JsonLd } from "@/components/seo/JsonLd"
 import { ConditionalLayout } from "@/components/layout/ConditionalLayout"
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  style: ["normal"],
+  display: "swap",
+  variable: "--font-cormorant",
+})
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-dm-sans",
+})
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://innerloom.in"
 
@@ -78,7 +95,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en-IN">
+    <html lang="en-IN" className={`${cormorant.variable} ${dmSans.variable}`}>
       <body>
         <JsonLd />
         <ConditionalLayout>{children}</ConditionalLayout>

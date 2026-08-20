@@ -1,18 +1,15 @@
-'use client'
-
-import { usePathname } from 'next/navigation'
+// ConditionalLayout is a Server Component.
+// The pathname check is delegated to a thin client boundary below.
 import { CrisisBanner } from './CrisisBanner'
 import Navbar from './Navbar'
-import Footer from '../../../src/components/layout/Footer'
+import Footer from './Footer'
 import { WhatsAppFAB } from '../shared/WhatsAppFAB'
+import { LayoutShell } from './LayoutShell'
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const isAdmin = pathname.startsWith('/admin') || pathname.startsWith('/studio')
-
   return (
-    <>
-      {!isAdmin && (
+    <LayoutShell
+      header={
         <>
           <a href="#main" className="sr-only focus:not-sr-only">
             Skip to content
@@ -20,10 +17,11 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
           <CrisisBanner />
           <Navbar />
         </>
-      )}
+      }
+      footer={<Footer />}
+      fab={<WhatsAppFAB />}
+    >
       <main id="main">{children}</main>
-      {!isAdmin && <Footer />}
-      {!isAdmin && <WhatsAppFAB />} 
-    </>
+    </LayoutShell>
   )
 }

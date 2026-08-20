@@ -40,6 +40,7 @@ export function Hero() {
     width={380}
     height={380}
     priority
+    sizes="(max-width: 768px) 85vw, 380px"
     className="w-full max-w-95 rounded-(--radius-xl)"
   />
 </div>
